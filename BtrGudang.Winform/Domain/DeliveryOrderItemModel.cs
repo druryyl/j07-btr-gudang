@@ -1,0 +1,17 @@
+﻿namespace BtrGudang.Winform.Domain
+{
+    public class DeliveryOrderItemModel
+    {
+        public DeliveryOrderItemModel(int noUrut, BrgType brg, QtyType qtyBesar, QtyType qtyKecil)
+        {
+            NoUrut = noUrut;
+            Brg = brg;
+            QtyBesar = qtyBesar;
+            QtyKecil = qtyKecil;
+        }
+        public int NoUrut { get; }
+        public BrgType Brg { get; }
+        public QtyType QtyBesar { get; }
+        public QtyType QtyKecil { get; }
+    }
+}
