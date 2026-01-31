@@ -1,14 +1,11 @@
-﻿using BtrGudang.Winform.Domain;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using BtrGudang.Domain.PackingOrderFeature;
+using BtrGudang.Winform.Domain;
 
-namespace BtrGudang.Winform.Infrastructure
+namespace BtrGudang.Infrastructure.PackingOrderFeature
 {
-    public class DeliveryOrderItemDto
+    public class PackingOrderItemDto
     {
+        public string PackingOrderId { get; set; }
         public int NoUrut { get; set; }
 
         // Flattened BrgType properties
@@ -24,10 +21,11 @@ namespace BtrGudang.Winform.Infrastructure
         public decimal QtyKecilQty { get; set; }
         public string QtyKecilSatuan { get; set; }
 
-        public static DeliveryOrderItemDto FromModel(DeliveryOrderItemModel model)
+        public static PackingOrderItemDto FromModel(PackingOrderItemModel model, string packingorderId)
         {
-            return new DeliveryOrderItemDto
+            return new PackingOrderItemDto
             {
+                PackingOrderId = packingorderId,
                 NoUrut = model.NoUrut,
                 BrgId = model.Brg.BrgId,
                 BrgCode = model.Brg.BrgCode,
@@ -39,13 +37,13 @@ namespace BtrGudang.Winform.Infrastructure
             };
         }
 
-        public DeliveryOrderItemModel ToModel()
+        public PackingOrderItemModel ToModel()
         {
             var brg = new BrgType(BrgId, BrgCode, BrgName);
             var qtyBesar = new QtyType(QtyBesarQty, QtyBesarSatuan);
             var qtyKecil = new QtyType(QtyKecilQty, QtyKecilSatuan);
 
-            return new DeliveryOrderItemModel(NoUrut, brg, qtyBesar, qtyKecil);
+            return new PackingOrderItemModel(NoUrut, brg, qtyBesar, qtyKecil);
         }
     }
 }

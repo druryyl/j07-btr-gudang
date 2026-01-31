@@ -1,18 +1,19 @@
 ﻿using System;
 
-namespace BtrGudang.Winform.Domain
+namespace BtrGudang.Domain.PackingOrderFeature
 {
     public class FakturType : IFakturKey
     {
-        public FakturType(string fakturId, string fakturCode, DateTime fakturDate)
+        public FakturType(string fakturId, string fakturCode, DateTime fakturDate, string adminName)
         {
             FakturId = fakturId;
             FakturCode = fakturCode;
             FakturDate = fakturDate;
+            AdminName = adminName;
         }
 
         public static FakturType Default => new FakturType(
-            "-", "-", new DateTime(3000, 1, 1));
+            "-", "-", new DateTime(3000, 1, 1), string.Empty);
 
         public static IFakturKey Key(string id)
         {
@@ -24,6 +25,7 @@ namespace BtrGudang.Winform.Domain
         public string FakturId { get; private set; }
         public string FakturCode { get; private set; }
         public DateTime FakturDate { get; private set; }
+        public string AdminName { get; private set; }
     }
 
     public interface IFakturKey

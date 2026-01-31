@@ -1,17 +1,14 @@
-﻿using BtrGudang.Winform.Domain;
+﻿using BtrGudang.Domain.PackingOrderFeature;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace BtrGudang.Winform.Infrastructure
+namespace BtrGudang.Infrastructure.PackingOrderFeature
 {
-    public class DeliveryOrderDto 
+    public class PackingOrderDto 
     {
-        public string DeliveryOrderId { get; set; }
-        public DateTime DeliveryOrderDate { get; set; }
-        public string DeliveryOrderCode { get; set; }
+        public string PackingOrderId { get; set; }
+        public DateTime PackingOrderDate { get; set; }
+        public string PackingOrderCode { get; set; }
 
         // Flattened CustomerType properties
         public string CustomerId { get; set; }
@@ -24,19 +21,20 @@ namespace BtrGudang.Winform.Infrastructure
         public string FakturId { get; set; }
         public string FakturCode { get; set; }
         public DateTime FakturDate { get; set; }
+        public string AdminName { get; set; }
 
         // Flattened LocationType properties
         public decimal Latitude { get; set; }
         public decimal Longitude { get; set; }
         public int Accuracy { get; set; }
 
-        public static DeliveryOrderDto FromModel(Domain.DeliveryOrderModel model)
+        public static PackingOrderDto FromModel(PackingOrderModel model)
         {
-            return new DeliveryOrderDto
+            return new PackingOrderDto
             {
-                DeliveryOrderId = model.DeliveryOrderId,
-                DeliveryOrderDate = model.DeliveryOrderDate,
-                DeliveryOrderCode = model.DeliveryOrderCode,
+                PackingOrderId = model.PackingOrderId,
+                PackingOrderDate = model.PackingOrderDate,
+                PackingOrderCode = model.PackingOrderCode,
                 CustomerId = model.Customer.CustomerId,
                 CustomerCode = model.Customer.CustomerCode,
                 CustomerName = model.Customer.CustomerName,
@@ -45,24 +43,25 @@ namespace BtrGudang.Winform.Infrastructure
                 FakturId = model.Faktur.FakturId,
                 FakturCode = model.Faktur.FakturCode,
                 FakturDate = model.Faktur.FakturDate,
+                AdminName = model.Faktur.AdminName,
                 Latitude = model.Location.Latitude,
                 Longitude = model.Location.Longitude,
                 Accuracy = model.Location.Accuracy
             };
         }
 
-        public DeliveryOrderModel ToModel(IEnumerable<DeliveryOrderItemModel> listItem)
+        public PackingOrderModel ToModel(IEnumerable<PackingOrderItemModel> listItem)
         {
             var customer = new CustomerType(
                 CustomerId, CustomerCode, CustomerName, Alamat, NoTelp);
             var faktur = new FakturType(
-                FakturId, FakturCode, FakturDate);
+                FakturId, FakturCode, FakturDate, AdminName);
             var location = new LocationType(
                 Latitude, Longitude, Accuracy);
-            return new DeliveryOrderModel(
-                DeliveryOrderId,
-                DeliveryOrderDate,
-                DeliveryOrderCode,
+            return new PackingOrderModel(
+                PackingOrderId,
+                PackingOrderDate,
+                PackingOrderCode,
                 customer,
                 faktur,
                 location,

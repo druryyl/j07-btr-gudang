@@ -1,8 +1,10 @@
-﻿namespace BtrGudang.Winform.Domain
+﻿using BtrGudang.Winform.Domain;
+
+namespace BtrGudang.Domain.PackingOrderFeature
 {
-    public class DeliveryOrderItemModel
+    public class PackingOrderItemModel
     {
-        public DeliveryOrderItemModel(int noUrut, BrgType brg, QtyType qtyBesar, QtyType qtyKecil)
+        public PackingOrderItemModel(int noUrut, BrgType brg, QtyType qtyBesar, QtyType qtyKecil)
         {
             NoUrut = noUrut;
             Brg = brg;

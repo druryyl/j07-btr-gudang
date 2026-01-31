@@ -1,19 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace BtrGudang.Winform.Helper
+namespace BtrGudang.Helper.Common
 {
     public interface IInsert<T>
     {
-        void Insert(T model);
+        void Insert(T dto);
+    }
+    public interface IInsertBulk<T>
+    {
+        void Insert(IEnumerable<T> dto);
     }
 
     public interface IUpdate<T>
     {
-        void Update(T model);
+        void Update(T dto);
     }
     public interface IDelete<T>
     {

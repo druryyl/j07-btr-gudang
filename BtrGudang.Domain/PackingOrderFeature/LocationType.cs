@@ -1,4 +1,4 @@
-﻿namespace BtrGudang.Winform.Domain
+﻿namespace BtrGudang.Domain.PackingOrderFeature
 {
     public class LocationType
     {
