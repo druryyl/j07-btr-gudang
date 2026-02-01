@@ -1,14 +1,14 @@
-﻿CREATE TABLE [dbo].[BTRG_DeliveryOrderItem]
+﻿CREATE TABLE [dbo].[BTRG_PackingOrderItem]
 (
-	DeliveryOrderId VARCHAR(26) NOT NULL CONSTRAINT DF_BTRG_DeliveryOrderItem_DeliveryOrderId DEFAULT (''),
-	NoUrut INT NOT NULL CONSTRAINT DF_BTRG_DeliveryOrderItem_NoUrut DEFAULT (0),
-	BrgId VARCHAR(6) NOT NULL CONSTRAINT DF_BTRG_DeliveryOrderItem_BrgId DEFAULT (''),
-	BrgCode VARCHAR(20) NOT NULL CONSTRAINT DF_BTRG_DeliveryOrderItem_BrgCode DEFAULT (''),
-	BrgName VARCHAR(100) NOT NULL CONSTRAINT DF_BTRG_DeliveryOrderItem_BrgName DEFAULT (''),
-	QtyBesar INT NOT NULL CONSTRAINT DF_BTRG_DeliveryOrderItem_QtyBesar DEFAULT (0),
-	SatBesar VARCHAR(10) NOT NULL CONSTRAINT DF_BTRG_DeliveryOrderItem_SatBesar DEFAULT (''),
-	QtyKecil INT NOT NULL CONSTRAINT DF_BTRG_DeliveryOrderItem_QtyKecil DEFAULT (0),
-	SatKecil VARCHAR(10) NOT NULL CONSTRAINT DF_BTRG_DeliveryOrderItem_SatKecil DEFAULT (''),
+	PackingOrderId VARCHAR(26) NOT NULL CONSTRAINT DF_BTRG_PackingOrderItem_PackingOrderId DEFAULT (''),
+	NoUrut INT NOT NULL CONSTRAINT DF_BTRG_PackingOrderItem_NoUrut DEFAULT (0),
+	BrgId VARCHAR(6) NOT NULL CONSTRAINT DF_BTRG_PackingOrderItem_BrgId DEFAULT (''),
+	BrgCode VARCHAR(20) NOT NULL CONSTRAINT DF_BTRG_PackingOrderItem_BrgCode DEFAULT (''),
+	BrgName VARCHAR(100) NOT NULL CONSTRAINT DF_BTRG_PackingOrderItem_BrgName DEFAULT (''),
+	QtyBesar INT NOT NULL CONSTRAINT DF_BTRG_PackingOrderItem_QtyBesar DEFAULT (0),
+	SatBesar VARCHAR(10) NOT NULL CONSTRAINT DF_BTRG_PackingOrderItem_SatBesar DEFAULT (''),
+	QtyKecil INT NOT NULL CONSTRAINT DF_BTRG_PackingOrderItem_QtyKecil DEFAULT (0),
+	SatKecil VARCHAR(10) NOT NULL CONSTRAINT DF_BTRG_PackingOrderItem_SatKecil DEFAULT (''),
 
-	CONSTRAINT PK_BTRG_DeliveryOrderItem PRIMARY KEY CLUSTERED (DeliveryOrderId, NoUrut)
+	CONSTRAINT PK_BTRG_PackingOrderItem PRIMARY KEY CLUSTERED (PackingOrderId, NoUrut)
 )

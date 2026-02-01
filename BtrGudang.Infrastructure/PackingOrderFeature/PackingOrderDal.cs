@@ -34,12 +34,12 @@ namespace BtrGudang.Infrastructure.PackingOrderFeature
                 INSERT INTO BTRG_PackingOrder(
                     PackingOrderId, PackingOrderDate, PackingOrderCode,
                     CustomerId, CustomerCode, CustomerName, Alamat, NoTelp,
-                    FakturId, FakturCode, FakturDate,
+                    FakturId, FakturCode, FakturDate, AdminName,
                     Latitude, Longitude, Accuracy)
                 VALUES(
                     @PackingOrderId, @PackingOrderDate, @PackingOrderCode,
                     @CustomerId, @CustomerCode, @CustomerName, @Alamat, @NoTelp,
-                    @FakturId, @FakturCode, @FakturDate,
+                    @FakturId, @FakturCode, @FakturDate, @AdminName,
                     @Latitude, @Longitude, @Accuracy)
                 ";
 
@@ -57,12 +57,14 @@ namespace BtrGudang.Infrastructure.PackingOrderFeature
             dp.AddParam("@FakturId", dto.FakturId, SqlDbType.VarChar);
             dp.AddParam("@FakturCode", dto.FakturCode, SqlDbType.VarChar);
             dp.AddParam("@FakturDate", dto.FakturDate, SqlDbType.DateTime);
+            dp.AddParam("@AdminName", dto.AdminName, SqlDbType.VarChar);
 
             dp.AddParam("@Latitude", dto.Latitude, SqlDbType.Decimal);
             dp.AddParam("@Longitude", dto.Longitude, SqlDbType.Decimal);
             dp.AddParam("@Accuracy", dto.Accuracy, SqlDbType.Int);
 
-            using (var conn = new SqlConnection(ConnStringHelper.Get(_opt)))
+            var connStr = ConnStringHelper.Get(_opt);
+            using (var conn = new SqlConnection(connStr))
             {
                 conn.Execute(sql, dp);
             }
@@ -83,6 +85,7 @@ namespace BtrGudang.Infrastructure.PackingOrderFeature
                     FakturId = @FakturId,
                     FakturCode = @FakturCode,
                     FakturDate = @FakturDate,
+                    AdminName = @AdminName,
                     Latitude = @Latitude,
                     Longitude = @Longitude,
                     Accuracy = @Accuracy
@@ -104,6 +107,7 @@ namespace BtrGudang.Infrastructure.PackingOrderFeature
             dp.AddParam("@FakturId", dto.FakturId, SqlDbType.VarChar);
             dp.AddParam("@FakturCode", dto.FakturCode, SqlDbType.VarChar);
             dp.AddParam("@FakturDate", dto.FakturDate, SqlDbType.DateTime);
+            dp.AddParam("@AdminName", dto.AdminName, SqlDbType.VarChar);
 
             dp.AddParam("@Latitude", dto.Latitude, SqlDbType.Decimal);
             dp.AddParam("@Longitude", dto.Longitude, SqlDbType.Decimal);
@@ -137,7 +141,7 @@ namespace BtrGudang.Infrastructure.PackingOrderFeature
                 SELECT
                     PackingOrderId, PackingOrderDate, PackingOrderCode,
                     CustomerId, CustomerCode, CustomerName, Alamat, NoTelp,
-                    FakturId, FakturCode, FakturDate,
+                    FakturId, FakturCode, FakturDate, AdminName,
                     Latitude, Longitude, Accuracy
                 FROM BTRG_PackingOrder
                 WHERE PackingOrderId = @PackingOrderId
@@ -158,10 +162,10 @@ namespace BtrGudang.Infrastructure.PackingOrderFeature
                 SELECT
                     PackingOrderId, PackingOrderDate, PackingOrderCode,
                     CustomerId, CustomerCode, CustomerName, Alamat, NoTelp,
-                    FakturId, FakturCode, FakturDate,
+                    FakturId, FakturCode, FakturDate, AdminName,
                     Latitude, Longitude, Accuracy
                 FROM BTRG_PackingOrder
-                WHERE PackingOrderDate BETWEEN @Tgl1 AND @Tg2
+                WHERE PackingOrderDate BETWEEN @Tgl1 AND @Tgl2
                 ";
 
             var dp = new DynamicParameters();

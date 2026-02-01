@@ -45,6 +45,7 @@
     <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
     </Reference>
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -53,10 +54,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\CollectionHelper.cs" />
     <Compile Include="Common\CrudInterface.cs" />
     <Compile Include="Common\DapperHelper.cs" />
+    <Compile Include="Common\MayBeMonad.cs" />
     <Compile Include="Common\Periode.cs" />
     <Compile Include="Common\RepoInterface.cs" />
+    <Compile Include="Common\ResultMonad.cs" />
+    <Compile Include="Common\TransHelper.cs" />
     <Compile Include="Common\TypeConvertor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -27,10 +27,8 @@ namespace Bilreg.Infrastructure.Shared.Helpers
         {
             var result = Options.Create<DatabaseOptions>(new DatabaseOptions
             {
-                ServerName = "(local))",
-                DbName = "devTest"
-                // ServerName = "(local)",
-                // DbName = "devTest"
+                ServerName = "(local)",
+                DbName = "btrgd"
 
             });
             return result;

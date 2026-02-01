@@ -11,7 +11,7 @@
 
     public interface ILoadEntity<TModel, TKey>
     {
-        TModel LoadEntity(TKey key);
+        MayBe<TModel> LoadEntity(TKey key);
     }
 
 }

@@ -81,13 +81,13 @@
     <Compile Include="PackingOrderFeature\PackingOrderItemDal.cs" />
     <Compile Include="PackingOrderFeature\PackingOrderItemDto.cs" />
     <Compile Include="PackingOrderFeature\PackingOrderRepo.cs" />
-    <Compile Include="PackingOrderFeature\IPackingOrderDal.cs" />
+    <Compile Include="PackingOrderFeature\PackingOrderDal.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BtrGudang.Application\BtrGudang.Application.csproj">
-      <Project>{66dd0098-0c38-4e3a-a160-1957b3e81ba3}</Project>
-      <Name>BtrGudang.Application</Name>
+    <ProjectReference Include="..\BtrGudang.AppTier\BtrGudang.AppTier.csproj">
+      <Project>{29be8497-af1c-4a8f-b7f0-5dcd7cf01b30}</Project>
+      <Name>BtrGudang.AppTier</Name>
     </ProjectReference>
     <ProjectReference Include="..\BtrGudang.Domain\BtrGudang.Domain.csproj">
       <Project>{2720b2a4-fddb-4434-b9e8-e17e06fe11b3}</Project>

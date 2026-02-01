@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("BtrGudang.Application")]
+[assembly: AssemblyTitle("BtrGudang.AppTier")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("BtrGudang.Application")]
+[assembly: AssemblyProduct("BtrGudang.AppTier")]
 [assembly: AssemblyCopyright("Copyright ©  2026")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("66dd0098-0c38-4e3a-a160-1957b3e81ba3")]
+[assembly: Guid("29be8497-af1c-4a8f-b7f0-5dcd7cf01b30")]
 
 // Version information for an assembly consists of the following four values:
 //
