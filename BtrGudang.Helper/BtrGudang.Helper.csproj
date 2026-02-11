@@ -59,6 +59,7 @@
     <Compile Include="Common\DapperHelper.cs" />
     <Compile Include="Common\MayBeMonad.cs" />
     <Compile Include="Common\Periode.cs" />
+    <Compile Include="Common\RegistryHelper.cs" />
     <Compile Include="Common\RepoInterface.cs" />
     <Compile Include="Common\ResultMonad.cs" />
     <Compile Include="Common\TransHelper.cs" />

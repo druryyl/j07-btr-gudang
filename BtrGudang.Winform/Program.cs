@@ -38,8 +38,6 @@ namespace BtrGudang.Winform
             // Run your main form
             var mainForm = ServiceProvider.GetRequiredService<Form1>();
             Application.Run(mainForm);
-
-            Application.Run(new Form1());
         }
         private static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
