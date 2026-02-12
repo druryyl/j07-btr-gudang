@@ -150,50 +150,50 @@ namespace PackingOrderDownloaderApp
     }
 
     // Supporting classes
-    //public class PackingOrderDownloaderSvc
-    //{
-    //    public async Task<(bool, string, List<PackingOrderModel>)> Execute(Periode periode)
-    //    {
-    //        // Simulate async work
-    //        await Task.Delay(1000);
+    public class PackingOrderDownloaderSvc
+    {
+        public async Task<(bool, string, List<PackingOrderModel>)> Execute(Periode periode)
+        {
+            // Simulate async work
+            await Task.Delay(1000);
 
-    //        // For demo purposes - replace with actual implementation
-    //        return (true,
-    //               "Download completed successfully",
-    //               new List<PackingOrderModel>
-    //               {
-    //                   new PackingOrderModel { DocumentId = "PO001", CustomerName = "Customer A" },
-    //                   new PackingOrderModel { DocumentId = "PO002", CustomerName = "Customer B" }
-    //               });
-    //    }
-    //}
+            // For demo purposes - replace with actual implementation
+            return (true,
+                   "Download completed successfully",
+                   new List<PackingOrderModel>
+                   {
+                       new PackingOrderModel { DocumentId = "PO001", CustomerName = "Customer A" },
+                       new PackingOrderModel { DocumentId = "PO002", CustomerName = "Customer B" }
+                   });
+        }
+    }
 
-    //public class Periode
-    //{
-    //    public Periode(DateTime tgl)
-    //    {
-    //        Tgl1 = tgl.Date;
-    //        Tgl2 = tgl.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
-    //    }
+    public class Periode
+    {
+        public Periode(DateTime tgl)
+        {
+            Tgl1 = tgl.Date;
+            Tgl2 = tgl.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
+        }
 
-    //    public Periode(DateTime tgl1, DateTime tgl2)
-    //    {
-    //        Tgl1 = tgl1.Date;
-    //        Tgl2 = tgl2.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
-    //    }
+        public Periode(DateTime tgl1, DateTime tgl2)
+        {
+            Tgl1 = tgl1.Date;
+            Tgl2 = tgl2.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
+        }
 
-    //    public DateTime Tgl1 { get; }
-    //    public DateTime Tgl2 { get; }
-    //}
+        public DateTime Tgl1 { get; }
+        public DateTime Tgl2 { get; }
+    }
 
-    //public class PackingOrderModel
-    //{
-    //    public string DocumentId { get; set; }
-    //    public string CustomerName { get; set; }
+    public class PackingOrderModel
+    {
+        public string DocumentId { get; set; }
+        public string CustomerName { get; set; }
 
-    //    public override string ToString()
-    //    {
-    //        return $"{DocumentId} - {CustomerName}";
-    //    }
-    //}
+        public override string ToString()
+        {
+            return $"{DocumentId} - {CustomerName}";
+        }
+    }
 }

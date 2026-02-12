@@ -8,25 +8,25 @@ namespace BtrGudang.Infrastructure.PackingOrderFeature
     {
         public string PackingOrderId { get; set; }
         public DateTime PackingOrderDate { get; set; }
-        public string PackingOrderCode { get; set; }
 
-        // Flattened CustomerType properties
+
         public string CustomerId { get; set; }
         public string CustomerCode { get; set; }
         public string CustomerName { get; set; }
         public string Alamat { get; set; }
         public string NoTelp { get; set; }
 
-        // Flattened FakturType properties
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+        public double Accuracy { get; set; }
+
         public string FakturId { get; set; }
         public string FakturCode { get; set; }
         public DateTime FakturDate { get; set; }
         public string AdminName { get; set; }
 
-        // Flattened LocationType properties
-        public decimal Latitude { get; set; }
-        public decimal Longitude { get; set; }
-        public int Accuracy { get; set; }
+        public DateTime DownloadTimestamp { get; set; }
+        public string OfficeCode { get; set; }
 
         public static PackingOrderDto FromModel(PackingOrderModel model)
         {
@@ -34,37 +34,42 @@ namespace BtrGudang.Infrastructure.PackingOrderFeature
             {
                 PackingOrderId = model.PackingOrderId,
                 PackingOrderDate = model.PackingOrderDate,
-                PackingOrderCode = model.PackingOrderCode,
                 CustomerId = model.Customer.CustomerId,
                 CustomerCode = model.Customer.CustomerCode,
                 CustomerName = model.Customer.CustomerName,
+                
                 Alamat = model.Customer.Alamat,
                 NoTelp = model.Customer.NoTelp,
+                Latitude = model.Location.Latitude,
+                Longitude = model.Location.Longitude,
+                Accuracy = model.Location.Accuracy,
+
                 FakturId = model.Faktur.FakturId,
                 FakturCode = model.Faktur.FakturCode,
                 FakturDate = model.Faktur.FakturDate,
                 AdminName = model.Faktur.AdminName,
-                Latitude = model.Location.Latitude,
-                Longitude = model.Location.Longitude,
-                Accuracy = model.Location.Accuracy
+
+                DownloadTimestamp = model.DownloadTimestamp,
+                OfficeCode = model.OfficeCode,
             };
         }
 
         public PackingOrderModel ToModel(IEnumerable<PackingOrderItemModel> listItem)
         {
-            var customer = new CustomerType(
+            var customer = new CustomerReff(
                 CustomerId, CustomerCode, CustomerName, Alamat, NoTelp);
-            var faktur = new FakturType(
+            var faktur = new FakturReff(
                 FakturId, FakturCode, FakturDate, AdminName);
-            var location = new LocationType(
+            var location = new LocationReff(
                 Latitude, Longitude, Accuracy);
             return new PackingOrderModel(
                 PackingOrderId,
                 PackingOrderDate,
-                PackingOrderCode,
                 customer,
-                faktur,
                 location,
+                faktur,
+                DownloadTimestamp,
+                OfficeCode,
                 listItem);
         }
     }

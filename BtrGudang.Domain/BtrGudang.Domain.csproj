@@ -42,7 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="PackingOrderFeature\BrgType.cs" />
-    <Compile Include="PackingOrderFeature\CustomerType.cs" />
+    <Compile Include="PackingOrderFeature\CustomerReff.cs" />
     <Compile Include="PackingOrderFeature\FakturType.cs" />
     <Compile Include="PackingOrderFeature\LocationType.cs" />
     <Compile Include="PackingOrderFeature\PackingOrderItemModel.cs" />

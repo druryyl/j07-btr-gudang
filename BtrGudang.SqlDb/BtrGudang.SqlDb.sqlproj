@@ -60,8 +60,8 @@
     <Folder Include="Scripts" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="Tables\BTRG_DeliveryOrder.sql" />
-    <Build Include="Tables\BTRG_DeliveryOrderItem.sql" />
+    <Build Include="Tables\BTRG_PackingOrder.sql" />
+    <Build Include="Tables\BTRG_PackingOrderItem.sql" />
     <None Include="Scripts\btrgd_database.sql" />
   </ItemGroup>
 </Project>

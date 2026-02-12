@@ -30,10 +30,11 @@ namespace BtrGudang.Test.PackingOrderFeature
                 BrgId = "B" + noUrut,
                 BrgCode = "C" + noUrut,
                 BrgName = "Barang " + noUrut,
-                QtyBesar = 10m + noUrut,
+                QtyBesar = 10 + noUrut,
                 SatBesar = "PCS",
-                QtyKecil = 100m + noUrut,
-                SatKecil = "UNIT"
+                QtyKecil = 100 + noUrut,
+                SatKecil = "UNIT",
+                DepoId = "JOG"
             };
 
             return result;

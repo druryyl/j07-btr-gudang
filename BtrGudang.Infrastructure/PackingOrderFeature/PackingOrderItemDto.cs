@@ -14,12 +14,13 @@ namespace BtrGudang.Infrastructure.PackingOrderFeature
         public string BrgName { get; set; }
 
         // Flattened QtyType properties (QtyBesar)
-        public decimal QtyBesar { get; set; }
+        public int QtyBesar { get; set; }
         public string SatBesar { get; set; }
 
         // Flattened QtyType properties (QtyKecil)
-        public decimal QtyKecil { get; set; }
+        public int QtyKecil { get; set; }
         public string SatKecil { get; set; }
+        public string DepoId { get; set; }
 
         public static PackingOrderItemDto FromModel(PackingOrderItemModel model, string packingorderId)
         {
@@ -33,7 +34,8 @@ namespace BtrGudang.Infrastructure.PackingOrderFeature
                 QtyBesar = model.QtyBesar.Qty,
                 SatBesar = model.QtyBesar.Satuan,
                 QtyKecil = model.QtyKecil.Qty,
-                SatKecil = model.QtyKecil.Satuan
+                SatKecil = model.QtyKecil.Satuan,
+                DepoId   = model.DepoId
             };
         }
 
@@ -43,7 +45,7 @@ namespace BtrGudang.Infrastructure.PackingOrderFeature
             var qtyBesar = new QtyType(QtyBesar, SatBesar);
             var qtyKecil = new QtyType(QtyKecil, SatKecil);
 
-            return new PackingOrderItemModel(NoUrut, brg, qtyBesar, qtyKecil);
+            return new PackingOrderItemModel(NoUrut, brg, qtyBesar, qtyKecil, DepoId);
         }
     }
 }

@@ -32,21 +32,21 @@ namespace BtrGudang.Infrastructure.PackingOrderFeature
         {
             const string sql = @"
                 INSERT INTO BTRG_PackingOrder(
-                    PackingOrderId, PackingOrderDate, PackingOrderCode,
+                    PackingOrderId, PackingOrderDate, 
                     CustomerId, CustomerCode, CustomerName, Alamat, NoTelp,
+                    Latitude, Longitude, Accuracy,
                     FakturId, FakturCode, FakturDate, AdminName,
-                    Latitude, Longitude, Accuracy)
+                    DownloadTimestamp, OfficeCode)
                 VALUES(
-                    @PackingOrderId, @PackingOrderDate, @PackingOrderCode,
+                    @PackingOrderId, @PackingOrderDate, 
                     @CustomerId, @CustomerCode, @CustomerName, @Alamat, @NoTelp,
+                    @Latitude, @Longitude, @Accuracy,
                     @FakturId, @FakturCode, @FakturDate, @AdminName,
-                    @Latitude, @Longitude, @Accuracy)
+                    @DownloadTimestamp, @OfficeCode)
                 ";
-
             var dp = new DynamicParameters();
             dp.AddParam("@PackingOrderId", dto.PackingOrderId, SqlDbType.VarChar);
             dp.AddParam("@PackingOrderDate", dto.PackingOrderDate, SqlDbType.DateTime);
-            dp.AddParam("@PackingOrderCode", dto.PackingOrderCode, SqlDbType.VarChar);
 
             dp.AddParam("@CustomerId", dto.CustomerId, SqlDbType.VarChar);
             dp.AddParam("@CustomerCode", dto.CustomerCode, SqlDbType.VarChar);
@@ -54,14 +54,17 @@ namespace BtrGudang.Infrastructure.PackingOrderFeature
             dp.AddParam("@Alamat", dto.Alamat, SqlDbType.VarChar);
             dp.AddParam("@NoTelp", dto.NoTelp, SqlDbType.VarChar);
 
+            dp.AddParam("@Latitude", dto.Latitude, SqlDbType.Float);
+            dp.AddParam("@Longitude", dto.Longitude, SqlDbType.Float);
+            dp.AddParam("@Accuracy", dto.Accuracy, SqlDbType.Float);
+
             dp.AddParam("@FakturId", dto.FakturId, SqlDbType.VarChar);
             dp.AddParam("@FakturCode", dto.FakturCode, SqlDbType.VarChar);
             dp.AddParam("@FakturDate", dto.FakturDate, SqlDbType.DateTime);
             dp.AddParam("@AdminName", dto.AdminName, SqlDbType.VarChar);
 
-            dp.AddParam("@Latitude", dto.Latitude, SqlDbType.Decimal);
-            dp.AddParam("@Longitude", dto.Longitude, SqlDbType.Decimal);
-            dp.AddParam("@Accuracy", dto.Accuracy, SqlDbType.Int);
+            dp.AddParam("@DownloadTimestamp", dto.DownloadTimestamp, SqlDbType.DateTime);
+            dp.AddParam("@OfficeCode", dto.OfficeCode, SqlDbType.VarChar);
 
             var connStr = ConnStringHelper.Get(_opt);
             using (var conn = new SqlConnection(connStr))
@@ -76,19 +79,23 @@ namespace BtrGudang.Infrastructure.PackingOrderFeature
                 UPDATE BTRG_PackingOrder
                 SET
                     PackingOrderDate = @PackingOrderDate,
-                    PackingOrderCode = @PackingOrderCode,
                     CustomerId = @CustomerId,
                     CustomerCode = @CustomerCode,
                     CustomerName = @CustomerName,
                     Alamat = @Alamat,
                     NoTelp = @NoTelp,
+
+                    Latitude = @Latitude,
+                    Longitude = @Longitude,
+                    Accuracy = @Accuracy,
+
                     FakturId = @FakturId,
                     FakturCode = @FakturCode,
                     FakturDate = @FakturDate,
                     AdminName = @AdminName,
-                    Latitude = @Latitude,
-                    Longitude = @Longitude,
-                    Accuracy = @Accuracy
+
+                    DownloadTimestamp = @DownloadTimestamp,
+                    OfficeCode = @OfficeCode
                 WHERE
                     PackingOrderId = @PackingOrderId
                 ";
@@ -96,7 +103,6 @@ namespace BtrGudang.Infrastructure.PackingOrderFeature
             var dp = new DynamicParameters();
             dp.AddParam("@PackingOrderId", dto.PackingOrderId, SqlDbType.VarChar);
             dp.AddParam("@PackingOrderDate", dto.PackingOrderDate, SqlDbType.DateTime);
-            dp.AddParam("@PackingOrderCode", dto.PackingOrderCode, SqlDbType.VarChar);
 
             dp.AddParam("@CustomerId", dto.CustomerId, SqlDbType.VarChar);
             dp.AddParam("@CustomerCode", dto.CustomerCode, SqlDbType.VarChar);
@@ -104,14 +110,17 @@ namespace BtrGudang.Infrastructure.PackingOrderFeature
             dp.AddParam("@Alamat", dto.Alamat, SqlDbType.VarChar);
             dp.AddParam("@NoTelp", dto.NoTelp, SqlDbType.VarChar);
 
+            dp.AddParam("@Latitude", dto.Latitude, SqlDbType.Float);
+            dp.AddParam("@Longitude", dto.Longitude, SqlDbType.Float);
+            dp.AddParam("@Accuracy", dto.Accuracy, SqlDbType.Float);
+
             dp.AddParam("@FakturId", dto.FakturId, SqlDbType.VarChar);
             dp.AddParam("@FakturCode", dto.FakturCode, SqlDbType.VarChar);
             dp.AddParam("@FakturDate", dto.FakturDate, SqlDbType.DateTime);
             dp.AddParam("@AdminName", dto.AdminName, SqlDbType.VarChar);
 
-            dp.AddParam("@Latitude", dto.Latitude, SqlDbType.Decimal);
-            dp.AddParam("@Longitude", dto.Longitude, SqlDbType.Decimal);
-            dp.AddParam("@Accuracy", dto.Accuracy, SqlDbType.Int);
+            dp.AddParam("@DownloadTimestamp", dto.DownloadTimestamp, SqlDbType.DateTime);
+            dp.AddParam("@OfficeCode", dto.OfficeCode, SqlDbType.VarChar);
 
             using (var conn = new SqlConnection(ConnStringHelper.Get(_opt)))
             {
@@ -139,10 +148,11 @@ namespace BtrGudang.Infrastructure.PackingOrderFeature
         {
             const string sql = @"
                 SELECT
-                    PackingOrderId, PackingOrderDate, PackingOrderCode,
+                    PackingOrderId, PackingOrderDate, 
                     CustomerId, CustomerCode, CustomerName, Alamat, NoTelp,
+                    Latitude, Longitude, Accuracy,
                     FakturId, FakturCode, FakturDate, AdminName,
-                    Latitude, Longitude, Accuracy
+                    DownloadTimestamp, OfficeCode
                 FROM BTRG_PackingOrder
                 WHERE PackingOrderId = @PackingOrderId
                 ";
@@ -160,10 +170,11 @@ namespace BtrGudang.Infrastructure.PackingOrderFeature
         {
             const string sql = @"
                 SELECT
-                    PackingOrderId, PackingOrderDate, PackingOrderCode,
+                    PackingOrderId, PackingOrderDate, 
                     CustomerId, CustomerCode, CustomerName, Alamat, NoTelp,
+                    Latitude, Longitude, Accuracy,
                     FakturId, FakturCode, FakturDate, AdminName,
-                    Latitude, Longitude, Accuracy
+                    DownloadTimestamp, OfficeCode
                 FROM BTRG_PackingOrder
                 WHERE PackingOrderDate BETWEEN @Tgl1 AND @Tgl2
                 ";

@@ -26,29 +26,30 @@ namespace BtrGudang.Test.PackingOrderFeature
 
         private PackingOrderModel CreateTestModel()
         {
-            var customer = new CustomerType("C1", "C001", "Customer Test", "Alamat", "08123");
-            var faktur = new FakturType("F1", "F001", new DateTime(2026, 2, 1), "ADM");
-            var location = new LocationType(1.23m, 4.56m, 7);
+            var customer = new CustomerReff("C1", "C001", "Customer Test", "Alamat", "08123");
+            var faktur = new FakturReff("F1", "F001", new DateTime(2026, 2, 1), "ADM");
+            var location = new LocationReff(1.23, 4.56, 7);
 
             var items = new List<PackingOrderItemModel>
             {
                 new PackingOrderItemModel(1,
                     new BrgType("B1", "BRG001", "Barang 1"),
-                    new QtyType(10m, "PCS"),
-                    new QtyType(100m, "UNIT")),
+                    new QtyType(10, "PCS"),
+                    new QtyType(100, "UNIT"), "JOG"),
                 new PackingOrderItemModel(2,
                     new BrgType("B2", "BRG002", "Barang 2"),
-                    new QtyType(5m, "PCS"),
-                    new QtyType(50m, "UNIT"))
+                    new QtyType(5, "PCS"),
+                    new QtyType(50, "UNIT"), "JOG")
             };
 
             return new PackingOrderModel(
                 "PO001",
                 new DateTime(2026, 2, 1),
-                "PO-2026-001",
                 customer,
-                faktur,
                 location,
+                faktur,
+                new DateTime(2026,2,12),
+                "JOG",
                 items);
         }
 

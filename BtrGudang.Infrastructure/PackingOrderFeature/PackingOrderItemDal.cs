@@ -41,6 +41,7 @@ namespace BtrGudang.Infrastructure.PackingOrderFeature
                 bcp.AddMap("SatBesar", "SatBesar");
                 bcp.AddMap("QtyKecil", "QtyKecil");
                 bcp.AddMap("SatKecil", "SatKecil");
+                bcp.AddMap("DepoId", "DepoId");
 
                 var fetched = listDto.ToList();
                 bcp.BatchSize = fetched.Count;
@@ -72,7 +73,8 @@ namespace BtrGudang.Infrastructure.PackingOrderFeature
                     PackingOrderId, NoUrut, 
                     BrgId, BrgCode, BrgName,
                     QtyBesar, SatBesar,
-                    QtyKecil, SatKecil
+                    QtyKecil, SatKecil,
+                    DepoId
                 FROM BTRG_PackingOrderItem
                 WHERE PackingOrderId = @PackingOrderId
                 ORDER BY NoUrut
@@ -87,4 +89,4 @@ namespace BtrGudang.Infrastructure.PackingOrderFeature
             }
         }
     }
-}
+}   

@@ -1,4 +1,5 @@
-﻿using PackingOrderDownloaderApp;
+﻿using PackingOrderDownloader;
+using PackingOrderDownloaderApp;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -20,9 +21,9 @@ namespace BtrGudang.Winform
 
         private void PT1DownloadPackingOrderMenu_Click(object sender, EventArgs e)
         {
-            if (BringMdiChildToFrontIfLoaded<DownloadPackingOrderForm>())
+            if (BringMdiChildToFrontIfLoaded<DownloadPackingOrder2Form>())
                 return;
-            var form = new DownloadPackingOrderForm();
+            var form = new DownloadPackingOrder2Form();
             form.StartPosition = FormStartPosition.CenterScreen;
             form.MdiParent = this;
             form.Show();

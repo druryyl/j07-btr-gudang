@@ -27,7 +27,6 @@ namespace BtrGudang.Test.PackingOrderFeature
             {
                 PackingOrderId = "A",
                 PackingOrderDate = new DateTime(2026, 2, 1),
-                PackingOrderCode = "B",
                 CustomerId = "C",
                 CustomerCode = "D",
                 CustomerName = "E",
@@ -37,9 +36,11 @@ namespace BtrGudang.Test.PackingOrderFeature
                 FakturCode = "I",
                 FakturDate = new DateTime(2026, 3, 1),
                 AdminName = "J",
-                Latitude = 1.23m,
-                Longitude = 4.56m,
-                Accuracy = 7
+                Latitude = 1.23,
+                Longitude = 4.56,
+                Accuracy = 7,
+                DownloadTimestamp = new DateTime(2026,2,12),
+                OfficeCode = "R",
             };
 
             return result;

@@ -13,28 +13,31 @@ namespace BtrGudang.Domain.PackingOrderFeature
         public PackingOrderModel(
             string packingOrderId,
             DateTime packingOrderDate,
-            string packingOrderCode,
-            CustomerType customer,
-            FakturType faktur,
-            LocationType location,
+            CustomerReff customer,
+            LocationReff location,
+            FakturReff faktur,
+            DateTime downloadTimestamp,
+            string offoiceCode,
             IEnumerable<PackingOrderItemModel> listItem)
         {
             PackingOrderId = packingOrderId;
             PackingOrderDate = packingOrderDate;
-            PackingOrderCode = packingOrderCode;
             Customer = customer;
-            Faktur = faktur;
             Location = location;
+            Faktur = faktur;
+            DownloadTimestamp = downloadTimestamp;
+            OfficeCode = offoiceCode;
             _listItem = listItem.ToList();
         }
 
         public static PackingOrderModel Default => new PackingOrderModel(
             "-",
             new DateTime(3000, 1, 1),
+            CustomerReff.Default,
+            LocationReff.Default,
+            FakturReff.Default,
+            new DateTime(3000,1,1),
             "-",
-            CustomerType.Default,
-            FakturType.Default,
-            LocationType.Default,
             Enumerable.Empty<PackingOrderItemModel>());
 
         public static IPackingOrderKey Key(string id)
@@ -46,10 +49,11 @@ namespace BtrGudang.Domain.PackingOrderFeature
 
         public string PackingOrderId { get; private set; }
         public DateTime PackingOrderDate { get; private set; }
-        public string PackingOrderCode { get; private set; }
-        public CustomerType Customer { get; private set; }
-        public FakturType Faktur { get; private set; }
-        public LocationType Location { get; private set; }
+        public CustomerReff Customer { get; private set; }
+        public LocationReff Location { get; private set; }
+        public FakturReff Faktur { get; private set; }
+        public DateTime DownloadTimestamp { get; private set; }
+        public string OfficeCode { get; private set;  }
         public IEnumerable<PackingOrderItemModel> ListItem => _listItem;
     }
 

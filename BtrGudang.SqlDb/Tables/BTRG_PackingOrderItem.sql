@@ -9,6 +9,7 @@
 	SatBesar VARCHAR(10) NOT NULL CONSTRAINT DF_BTRG_PackingOrderItem_SatBesar DEFAULT (''),
 	QtyKecil INT NOT NULL CONSTRAINT DF_BTRG_PackingOrderItem_QtyKecil DEFAULT (0),
 	SatKecil VARCHAR(10) NOT NULL CONSTRAINT DF_BTRG_PackingOrderItem_SatKecil DEFAULT (''),
+	DepoId VARCHAR(3) NOT NULL CONSTRAINT DF_BTR_PackingOrderItem_DepoId DEFAULT(''),
 
 	CONSTRAINT PK_BTRG_PackingOrderItem PRIMARY KEY CLUSTERED (PackingOrderId, NoUrut)
 )
