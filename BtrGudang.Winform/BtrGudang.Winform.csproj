@@ -172,6 +172,7 @@
     <Compile Include="Forms\DownloadPackingOrder2Form.Designer.cs">
       <DependentUpon>DownloadPackingOrder2Form.cs</DependentUpon>
     </Compile>
+    <Compile Include="IFormFactory.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\PackingOrderDownloaderSvc.cs" />

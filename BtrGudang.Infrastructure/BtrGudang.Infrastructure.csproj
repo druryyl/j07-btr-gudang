@@ -75,6 +75,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\BtradeCloudOptions.cs" />
     <Compile Include="Helpers\ConnStringHelper.cs" />
     <Compile Include="Helpers\DatabaseOptions.cs" />
     <Compile Include="PackingOrderFeature\PackingOrderDto.cs" />

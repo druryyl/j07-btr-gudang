@@ -1,6 +1,8 @@
 ﻿using BtrGudang.Domain.PackingOrderFeature;
 using BtrGudang.Helper.Common;
+using BtrGudang.Infrastructure.Helpers;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using RestSharp;
 using System;
 using System.Collections.Generic;
@@ -16,11 +18,17 @@ namespace BtrGudang.Winform.Services
     public class PackingOrderDownloaderSvc
     {
         private readonly RegistryHelper _registryHelper;
+        private readonly BtradeCloudOptions _btradeCloudOpt;
+        public PackingOrderDownloaderSvc(IOptions<BtradeCloudOptions> btradeCloudOpt)
+        {
+            _btradeCloudOpt = btradeCloudOpt.Value;
+            _registryHelper = new RegistryHelper();
+        }
 
         public async Task<(bool, string, DateTime, IEnumerable<PackingOrderModel>)> Execute(DateTime startTimestamp, string warehouseCode, int pageSize)
         {
             var serverTargetId = _registryHelper.ReadString("ServerTargetID");
-            var baseUrl = System.Configuration.ConfigurationManager.AppSettings["btrade-cloud-base-url"];
+            var baseUrl = _btradeCloudOpt.BaseUrl;
             var endpoint = $"{baseUrl}/api/PackingOrder/{{startTimestamp}}/{{warehouseCode}}/{{pageSize}}";
             var client = new RestClient(endpoint);
 
@@ -52,7 +60,8 @@ namespace BtrGudang.Winform.Services
                 return (false, $"API returned non-success status: {apiResponse.Status}", defaultDate, null);
             }
             var respData = apiResponse.Data;
-            var responseStr = string.Join("\r",
+            var responseStr = "Downloaded Packing Order:\r";
+            responseStr += string.Join("\r",
                 respData.ListData.Select(x => $"{x.FakturCode} - {x.FakturDate:yyyy-MM-dd} - {x.CustomerName}"));
             var listPackingOrder = respData.ListData.Select(x => x.ToModel());
             var lastTimestamp = DateTime.ParseExact(respData.LastTimestamp, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
@@ -104,10 +113,10 @@ namespace BtrGudang.Winform.Services
             var faktur = new FakturReff(FakturId, FakturCode, fakturDate, AdminName);
 
             var listItem = ListItem.Select(x => new PackingOrderItemModel(
-                x.NoUrut, new BrgReff(x.BrgId, x.BrgCode, x.BrgNme, x.Kategori, x.Supplier),
+                x.NoUrut, new BrgReff(x.BrgId, x.BrgCode, x.BrgNme, x.KategoriName, x.SupplierName),
                 new Domain.QtyType(x.QtyBesar, x.SatBesar),
                 new Domain.QtyType(x.QtyKecil, x.SatKecil),
-                x.depoId));
+                x.DepoId));
 
             var result = new PackingOrderModel(
                 PackingOrderId, packingOrderDate, customer, location, faktur,
@@ -122,13 +131,13 @@ namespace BtrGudang.Winform.Services
         public string BrgId { get; set; }
         public string BrgCode { get; set; }
         public string BrgNme { get; set; }
-        public string Kategori { get; set; }
-        public string Supplier { get; set; }
+        public string KategoriName { get; set; }
+        public string SupplierName { get; set; }
         public int QtyBesar { get; set; }
         public string SatBesar { get; set; }
         public int QtyKecil { get; set; }
         public string SatKecil { get; set; }
-        public string depoId { get; set; }
+        public string DepoId { get; set; }
     }
 
     public class ApiResponse<T>

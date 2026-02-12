@@ -1,12 +1,12 @@
-﻿using BtrGudang.Winform.Infrastructure;
+﻿using BtrGudang.Infrastructure.Helpers;
+using BtrGudang.Winform.BtrGudang.Winform.Services;
+using BtrGudang.Winform.Infrastructure;
+using BtrGudang.Winform.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
+using PackingOrderDownloader;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace BtrGudang.Winform
@@ -29,7 +29,6 @@ namespace BtrGudang.Winform
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .Build();
 
-
             // Setup DI
             var services = new ServiceCollection();
             ConfigureServices(services, configuration);
@@ -42,13 +41,17 @@ namespace BtrGudang.Winform
         private static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
             // Register configuration options
-            services.Configure<DatabaseOptions>(configuration.GetSection("DatabaseOptions"));
-
-            // Register your DAL and other services
-            //services.AddTransient<IPackingOrderItemDal, PackingOrderItemDal>();
+            services.Configure<DatabaseOptions>(configuration.GetSection("Database"));
+            services.Configure<BtradeCloudOptions>(configuration.GetSection("BtradeCloud"));
+            
+            //  Register services
+            services.AddTransient<PackingOrderDownloaderSvc, PackingOrderDownloaderSvc>();
 
             // Register forms
+            services.AddSingleton<IFormFactory, FormFactory>();
+            services.AddTransient<DownloadPackingOrder2Form>();
             services.AddTransient<MainForm>();
+
         }
     }
 }

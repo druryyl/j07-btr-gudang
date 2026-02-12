@@ -17,24 +17,26 @@ namespace PackingOrderDownloader
         private RegistryHelper _registryHelper;
 
         // Service and state management
-        private readonly PackingOrderDownloaderSvc _downloadService;
         private DateTime _nextScheduledExecution;
         private int _isExecuting = 0; // Using int for Interlocked operations
         private const int DOWNLOAD_INTERVAL_MILLISECONDS = 5 * 60 * 1000; // 5 minutes
         private readonly string _depoId;
         private DateTime _lastTimestamp;
 
-        public DownloadPackingOrder2Form()
+        private readonly PackingOrderDownloaderSvc _packingOrderDownloaderSvc;
+
+
+        public DownloadPackingOrder2Form(PackingOrderDownloaderSvc packingOrderDownloaderSvc)
         {
-            _downloadService = new PackingOrderDownloaderSvc();
             _registryHelper = new RegistryHelper();
             _depoId = _registryHelper.ReadString("DepoId");
             _lastTimestamp = DateTime.Now.Date.AddDays(-3);
+            _packingOrderDownloaderSvc = packingOrderDownloaderSvc;
 
             InitializeComponent();
             InitializeTimers();
             ScheduleNextExecution();
-            
+
             // Log initial message
             LogMessage("Application started successfully", LogLevel.Info);
             LogMessage($"Automatic download interval: {DOWNLOAD_INTERVAL_MILLISECONDS / 1000 / 60} minutes", LogLevel.Info);
@@ -97,7 +99,7 @@ namespace PackingOrderDownloader
                 LogMessage($"Period: {periode.Tgl1:yyyy-MM-dd HH:mm:ss} to {periode.Tgl2:yyyy-MM-dd HH:mm:ss}", LogLevel.Info);
 
                 // Execute the service call
-                var (success, message, lastTimestamp, orders) = await _downloadService.Execute(_lastTimestamp, _depoId, 100);
+                var (success, message, lastTimestamp, orders) = await _packingOrderDownloaderSvc.Execute(_lastTimestamp, _depoId, 100);
                 _lastTimestamp = lastTimestamp;
 
                 // Log results

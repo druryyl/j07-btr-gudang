@@ -51,7 +51,7 @@ namespace PackingOrderDownloader
             this._headerPanel.Location = new System.Drawing.Point(0, 0);
             this._headerPanel.Name = "_headerPanel";
             this._headerPanel.Padding = new System.Windows.Forms.Padding(10);
-            this._headerPanel.Size = new System.Drawing.Size(584, 80);
+            this._headerPanel.Size = new System.Drawing.Size(384, 80);
             this._headerPanel.TabIndex = 0;
             // 
             // _statusLabel
@@ -61,7 +61,7 @@ namespace PackingOrderDownloader
             this._statusLabel.ForeColor = System.Drawing.Color.White;
             this._statusLabel.Location = new System.Drawing.Point(10, 45);
             this._statusLabel.Name = "_statusLabel";
-            this._statusLabel.Size = new System.Drawing.Size(564, 25);
+            this._statusLabel.Size = new System.Drawing.Size(364, 25);
             this._statusLabel.TabIndex = 1;
             this._statusLabel.Text = "Ready";
             this._statusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -73,7 +73,7 @@ namespace PackingOrderDownloader
             this._clockLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
             this._clockLabel.Location = new System.Drawing.Point(10, 10);
             this._clockLabel.Name = "_clockLabel";
-            this._clockLabel.Size = new System.Drawing.Size(564, 35);
+            this._clockLabel.Size = new System.Drawing.Size(364, 35);
             this._clockLabel.TabIndex = 0;
             this._clockLabel.Text = "00:00:00";
             this._clockLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -89,7 +89,7 @@ namespace PackingOrderDownloader
             this._logTextBox.Margin = new System.Windows.Forms.Padding(12);
             this._logTextBox.Name = "_logTextBox";
             this._logTextBox.ReadOnly = true;
-            this._logTextBox.Size = new System.Drawing.Size(584, 460);
+            this._logTextBox.Size = new System.Drawing.Size(384, 351);
             this._logTextBox.TabIndex = 1;
             this._logTextBox.Text = "";
             this._logTextBox.WordWrap = false;
@@ -99,10 +99,10 @@ namespace PackingOrderDownloader
             this._footerPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this._footerPanel.Controls.Add(this._manualDownloadButton);
             this._footerPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this._footerPanel.Location = new System.Drawing.Point(0, 540);
+            this._footerPanel.Location = new System.Drawing.Point(0, 431);
             this._footerPanel.Name = "_footerPanel";
             this._footerPanel.Padding = new System.Windows.Forms.Padding(10);
-            this._footerPanel.Size = new System.Drawing.Size(584, 60);
+            this._footerPanel.Size = new System.Drawing.Size(384, 60);
             this._footerPanel.TabIndex = 2;
             // 
             // _manualDownloadButton
@@ -116,7 +116,7 @@ namespace PackingOrderDownloader
             this._manualDownloadButton.ForeColor = System.Drawing.Color.White;
             this._manualDownloadButton.Location = new System.Drawing.Point(10, 10);
             this._manualDownloadButton.Name = "_manualDownloadButton";
-            this._manualDownloadButton.Size = new System.Drawing.Size(564, 40);
+            this._manualDownloadButton.Size = new System.Drawing.Size(364, 40);
             this._manualDownloadButton.TabIndex = 0;
             this._manualDownloadButton.Text = "Download Now";
             this._manualDownloadButton.UseVisualStyleBackColor = false;
@@ -126,11 +126,11 @@ namespace PackingOrderDownloader
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(584, 600);
+            this.ClientSize = new System.Drawing.Size(384, 491);
             this.Controls.Add(this._logTextBox);
             this.Controls.Add(this._footerPanel);
             this.Controls.Add(this._headerPanel);
-            this.MinimumSize = new System.Drawing.Size(600, 400);
+            this.MinimumSize = new System.Drawing.Size(400, 400);
             this.Name = "DownloadPackingOrder2Form";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Packing Order Downloader";

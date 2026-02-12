@@ -1,4 +1,5 @@
-﻿using PackingOrderDownloader;
+﻿using BtrGudang.Winform.BtrGudang.Winform.Services;
+using PackingOrderDownloader;
 using System;
 using System.Linq;
 using System.Windows.Forms;
@@ -7,16 +8,21 @@ namespace BtrGudang.Winform
 {
     public partial class MainForm : Form
     {
-        public MainForm()
+        private readonly IFormFactory _formFactory;
+
+        public MainForm(IFormFactory formFactory)
         {
             InitializeComponent();
+
+            _formFactory = formFactory;
         }
 
         private void PT1DownloadPackingOrderMenu_Click(object sender, EventArgs e)
         {
             if (BringMdiChildToFrontIfLoaded<DownloadPackingOrder2Form>())
                 return;
-            var form = new DownloadPackingOrder2Form();
+
+            var form = _formFactory.CreateForm<DownloadPackingOrder2Form>();
             form.StartPosition = FormStartPosition.CenterScreen;
             form.MdiParent = this;
             form.Show();
