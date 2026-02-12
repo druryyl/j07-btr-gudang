@@ -33,11 +33,11 @@ namespace BtrGudang.Test.PackingOrderFeature
             var items = new List<PackingOrderItemModel>
             {
                 new PackingOrderItemModel(1,
-                    new BrgType("B1", "BRG001", "Barang 1"),
+                    new BrgReff("B1", "BRG001", "Barang 1", "Kategori", "Supplier"),
                     new QtyType(10, "PCS"),
                     new QtyType(100, "UNIT"), "JOG"),
                 new PackingOrderItemModel(2,
-                    new BrgType("B2", "BRG002", "Barang 2"),
+                    new BrgReff("B2", "BRG002", "Barang 2", "Kategori", "Supplier"),
                     new QtyType(5, "PCS"),
                     new QtyType(50, "UNIT"), "JOG")
             };

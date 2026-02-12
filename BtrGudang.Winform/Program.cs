@@ -36,7 +36,7 @@ namespace BtrGudang.Winform
             ServiceProvider = services.BuildServiceProvider();
 
             // Run your main form
-            var mainForm = ServiceProvider.GetRequiredService<Form1>();
+            var mainForm = ServiceProvider.GetRequiredService<MainForm>();
             Application.Run(mainForm);
         }
         private static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
@@ -48,7 +48,7 @@ namespace BtrGudang.Winform
             //services.AddTransient<IPackingOrderItemDal, PackingOrderItemDal>();
 
             // Register forms
-            services.AddTransient<Form1>();
+            services.AddTransient<MainForm>();
         }
     }
 }

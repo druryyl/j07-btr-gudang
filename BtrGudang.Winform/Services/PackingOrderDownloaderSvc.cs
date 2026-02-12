@@ -4,11 +4,12 @@ using Microsoft.Extensions.Configuration;
 using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using System.Configuration;
 
 namespace BtrGudang.Winform.Services
 {
@@ -16,69 +17,118 @@ namespace BtrGudang.Winform.Services
     {
         private readonly RegistryHelper _registryHelper;
 
-        public async Task<(bool, string, List<PackingOrderModel>)> Execute(Periode periode)
+        public async Task<(bool, string, DateTime, IEnumerable<PackingOrderModel>)> Execute(DateTime startTimestamp, string warehouseCode, int pageSize)
         {
-            //var serverTargetId = _registryHelper.ReadString("ServerTargetID");
-            //var baseUrl = System.Configuration.ConfigurationManager.AppSettings["btrade-cloud-base-url"];
-            //var endpoint = $"{baseUrl}/api/Order/incremental/{{tgl1}}/{{tgl2}}/{{serverId}}";
-            //var client = new RestClient(endpoint);
+            var serverTargetId = _registryHelper.ReadString("ServerTargetID");
+            var baseUrl = System.Configuration.ConfigurationManager.AppSettings["btrade-cloud-base-url"];
+            var endpoint = $"{baseUrl}/api/PackingOrder/{{startTimestamp}}/{{warehouseCode}}/{{pageSize}}";
+            var client = new RestClient(endpoint);
 
-            //var request = new RestRequest()
-            //    .AddUrlSegment("tgl1", periode.Tgl1.ToString("yyyy-MM-dd"))
-            //    .AddUrlSegment("tgl2", periode.Tgl2.ToString("yyyy-MM-dd"))
-            //    .AddUrlSegment("serverId", serverTargetId);
-            //var response = await client.ExecuteGetAsync(request);
+            var request = new RestRequest()
+                .AddUrlSegment("startTimestamp", startTimestamp.ToString("yyyy-MM-dd HH:mm:ss"))
+                .AddUrlSegment("warehouseCode", warehouseCode)
+                .AddUrlSegment("pageSize", pageSize);
+            var response = await client.ExecuteGetAsync(request);
 
-            //if (!response.IsSuccessful)
-            //{
-            //    return (false, response.ErrorMessage ?? response.StatusDescription, null);
-            //}
+            var defaultDate = new DateTime(3000,1,1);
+            if (!response.IsSuccessful)
+            {
+                return (false, response.ErrorMessage ?? response.StatusDescription, defaultDate, null);
+            }
 
-            //var options = new JsonSerializerOptions
-            //{
-            //    PropertyNameCaseInsensitive = true
-            //};
-            //var apiResponse = JsonSerializer.Deserialize<ApiResponse<List<PackingOrderModel>>>(response.Content, options);
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+            var apiResponse = JsonSerializer.Deserialize<ApiResponse<PackingOrderDownloadResponse>>(response.Content, options);
 
-            //if (apiResponse == null)
-            //{
-            //    return (false, "Failed to deserialize API response", null);
-            //}
+            if (apiResponse == null)
+            {
+                return (false, "Failed to deserialize API response", defaultDate, null);
+            }
 
-            //if (apiResponse.Status?.ToLower() != "success")
-            //{
-            //    return (false, $"API returned non-success status: {apiResponse.Status}", null);
-            //}
+            if (apiResponse.Status?.ToLower() != "success")
+            {
+                return (false, $"API returned non-success status: {apiResponse.Status}", defaultDate, null);
+            }
+            var respData = apiResponse.Data;
+            var responseStr = string.Join("\r",
+                respData.ListData.Select(x => $"{x.FakturCode} - {x.FakturDate:yyyy-MM-dd} - {x.CustomerName}"));
+            var listPackingOrder = respData.ListData.Select(x => x.ToModel());
+            var lastTimestamp = DateTime.ParseExact(respData.LastTimestamp, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
 
-            //return (true, "", apiResponse.Data ?? new List<PackingOrderModel>());
-            await Task.Delay(1000);
-
-            // For demo purposes - replace with actual implementation
-            return (true,
-                   "Download completed successfully",
-                   new List<PackingOrderModel>
-                   {
-                       Faker1(),
-                       Faker2()
-                   });
+            return (true, responseStr, lastTimestamp, listPackingOrder);
         }
-        public PackingOrderModel Faker1()
+    }
+
+    public class PackingOrderDownloadCmd
+    {
+        public string StartTimestamp { get; set; }
+        public string DepoId { get; set; }
+        public int PageSize { get; set; }
+    }
+
+    public class PackingOrderDownloadResponse
+    {
+        public string LastTimestamp { get; set; }
+        public IEnumerable<PackingOrderDownloadTrsResponse> ListData { get; set; }
+    }
+
+    public class PackingOrderDownloadTrsResponse
+    {
+        public string PackingOrderId {get; set;}
+        public string PackingOrderDate {get;set;}
+        public string CustomerId {get;set;}
+        public string CustomerCode {get;set;}
+        public string CustomerName {get;set;}
+        public string Alamat {get;set;}
+        public string NoTelp {get;set;}
+        public double Latitude {get;set;}
+        public double Longitude {get;set;}
+        public double Accuracy {get;set;}
+        public string FakturId {get;set;}
+        public string FakturCode {get;set;}
+        public string FakturDate {get;set;}
+        public string AdminName {get;set;}
+        public string WarehouseDesc {get;set;}
+        public string OfficeCode {get;set;}
+        public IEnumerable<PackingOrderDownloadItemResponse> ListItem { get; set;  }
+
+        public PackingOrderModel ToModel()
         {
-            var listItem = new List<PackingOrderModel>();
-            return new PackingOrderModel("A000139", new DateTime(2026, 2, 11), 
-                CustomerReff.Default, LocationReff.Default, FakturReff.Default, 
-                new DateTime(2026,2,2), "JOG",
-                new List<PackingOrderItemModel>());
-        }
+            var packingOrderDate = DateTime.ParseExact(PackingOrderDate, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+            var customer = new CustomerReff(CustomerId, CustomerCode, CustomerName, Alamat, NoTelp);
+            var location = new LocationReff(Latitude, Longitude, Accuracy);
 
-        public PackingOrderModel Faker2()
-        {
-            var listItem = new List<PackingOrderModel>();
-            return new PackingOrderModel("A000144", new DateTime(2026, 2, 11), 
-                CustomerReff.Default, LocationReff.Default, FakturReff.Default,
-                new DateTime(2026,2,3), "JOG",
-                new List<PackingOrderItemModel>());
+            var fakturDate = DateTime.ParseExact(FakturDate, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+            var faktur = new FakturReff(FakturId, FakturCode, fakturDate, AdminName);
+
+            var listItem = ListItem.Select(x => new PackingOrderItemModel(
+                x.NoUrut, new BrgReff(x.BrgId, x.BrgCode, x.BrgNme, x.Kategori, x.Supplier),
+                new Domain.QtyType(x.QtyBesar, x.SatBesar),
+                new Domain.QtyType(x.QtyKecil, x.SatKecil),
+                x.depoId));
+
+            var result = new PackingOrderModel(
+                PackingOrderId, packingOrderDate, customer, location, faktur,
+                DateTime.Now, OfficeCode, listItem);
+            return result;
         }
+    }
+
+    public class PackingOrderDownloadItemResponse
+    {
+        public int NoUrut { get; set; }
+        public string BrgId { get; set; }
+        public string BrgCode { get; set; }
+        public string BrgNme { get; set; }
+        public string Kategori { get; set; }
+        public string Supplier { get; set; }
+        public int QtyBesar { get; set; }
+        public string SatBesar { get; set; }
+        public int QtyKecil { get; set; }
+        public string SatKecil { get; set; }
+        public string depoId { get; set; }
     }
 
     public class ApiResponse<T>

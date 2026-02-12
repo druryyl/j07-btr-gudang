@@ -2,30 +2,35 @@ using BtrGudang.Helper.Common;
 using BtrGudang.Winform.Services;
 using System;
 using System.Drawing;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace PackingOrderDownloader
 {
-    /// <summary>
-    /// Main form for the Packing Order Downloader application
-    /// </summary>
     public partial class DownloadPackingOrder2Form : Form
     {
         // Timers
         private System.Windows.Forms.Timer _downloadTimer;
         private System.Windows.Forms.Timer _clockTimer;
+        private RegistryHelper _registryHelper;
 
         // Service and state management
         private readonly PackingOrderDownloaderSvc _downloadService;
         private DateTime _nextScheduledExecution;
         private int _isExecuting = 0; // Using int for Interlocked operations
         private const int DOWNLOAD_INTERVAL_MILLISECONDS = 5 * 60 * 1000; // 5 minutes
+        private readonly string _depoId;
+        private DateTime _lastTimestamp;
 
         public DownloadPackingOrder2Form()
         {
             _downloadService = new PackingOrderDownloaderSvc();
+            _registryHelper = new RegistryHelper();
+            _depoId = _registryHelper.ReadString("DepoId");
+            _lastTimestamp = DateTime.Now.Date.AddDays(-3);
+
             InitializeComponent();
             InitializeTimers();
             ScheduleNextExecution();
@@ -35,9 +40,6 @@ namespace PackingOrderDownloader
             LogMessage($"Automatic download interval: {DOWNLOAD_INTERVAL_MILLISECONDS / 1000 / 60} minutes", LogLevel.Info);
         }
 
-        /// <summary>
-        /// Initialize and start timers
-        /// </summary>
         private void InitializeTimers()
         {
             // Clock timer - updates every second
@@ -57,34 +59,21 @@ namespace PackingOrderDownloader
             _downloadTimer.Start();
         }
 
-        /// <summary>
-        /// Clock timer tick event - updates the clock display
-        /// </summary>
         private void ClockTimer_Tick(object sender, EventArgs e)
         {
             _clockLabel.Text = DateTime.Now.ToString("HH:mm:ss");
         }
 
-        /// <summary>
-        /// Download timer tick event - triggers automatic download
-        /// </summary>
         private async void DownloadTimer_Tick(object sender, EventArgs e)
         {
             await ExecuteDownloadAsync(isManual: false);
         }
 
-        /// <summary>
-        /// Manual download button click event
-        /// </summary>
         private async void ManualDownloadButton_Click(object sender, EventArgs e)
         {
             await ExecuteDownloadAsync(isManual: true);
         }
 
-        /// <summary>
-        /// Execute the download operation asynchronously
-        /// </summary>
-        /// <param name="isManual">Indicates if this is a manual execution</param>
         private async Task ExecuteDownloadAsync(bool isManual)
         {
             // Prevent overlapping executions using thread-safe approach
@@ -108,13 +97,14 @@ namespace PackingOrderDownloader
                 LogMessage($"Period: {periode.Tgl1:yyyy-MM-dd HH:mm:ss} to {periode.Tgl2:yyyy-MM-dd HH:mm:ss}", LogLevel.Info);
 
                 // Execute the service call
-                var (success, message, orders) = await _downloadService.Execute(periode);
+                var (success, message, lastTimestamp, orders) = await _downloadService.Execute(_lastTimestamp, _depoId, 100);
+                _lastTimestamp = lastTimestamp;
 
                 // Log results
                 if (success)
                 {
                     LogMessage($"[SUCCESS] {message}", LogLevel.Success);
-                    LogMessage($"Records retrieved: {orders.Count}", LogLevel.Info);
+                    LogMessage($"Records retrieved: {orders.Count()}", LogLevel.Info);
                 }
                 else
                 {
@@ -143,18 +133,11 @@ namespace PackingOrderDownloader
             }
         }
 
-        /// <summary>
-        /// Schedule the next execution time
-        /// </summary>
         private void ScheduleNextExecution()
         {
             _nextScheduledExecution = DateTime.Now.AddMilliseconds(DOWNLOAD_INTERVAL_MILLISECONDS);
         }
 
-        /// <summary>
-        /// Update UI elements based on execution state
-        /// </summary>
-        /// <param name="isExecuting">Current execution state</param>
         private void UpdateUIState(bool isExecuting)
         {
             if (this.InvokeRequired)
@@ -168,9 +151,6 @@ namespace PackingOrderDownloader
             _statusLabel.Text = isExecuting ? "Downloading data..." : "Ready";
         }
 
-        /// <summary>
-        /// Log levels for message categorization
-        /// </summary>
         private enum LogLevel
         {
             Info,
@@ -179,11 +159,6 @@ namespace PackingOrderDownloader
             Error
         }
 
-        /// <summary>
-        /// Log a message to the RichTextBox with color coding
-        /// </summary>
-        /// <param name="message">Message to log</param>
-        /// <param name="level">Log level</param>
         private void LogMessage(string message, LogLevel level)
         {
             if (_logTextBox.InvokeRequired)
@@ -223,9 +198,6 @@ namespace PackingOrderDownloader
             _logTextBox.ScrollToCaret();
         }
 
-        /// <summary>
-        /// Clean up resources when form is closing
-        /// </summary>
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             _downloadTimer?.Stop();

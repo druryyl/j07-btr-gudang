@@ -41,7 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PackingOrderFeature\BrgType.cs" />
+    <Compile Include="PackingOrderFeature\BrgReff.cs" />
     <Compile Include="PackingOrderFeature\CustomerReff.cs" />
     <Compile Include="PackingOrderFeature\FakturType.cs" />
     <Compile Include="PackingOrderFeature\LocationType.cs" />

@@ -30,6 +30,8 @@ namespace BtrGudang.Test.PackingOrderFeature
                 BrgId = "B" + noUrut,
                 BrgCode = "C" + noUrut,
                 BrgName = "Barang " + noUrut,
+                Kategori = "Kategori",
+                Supplier = "SUpplier",
                 QtyBesar = 10 + noUrut,
                 SatBesar = "PCS",
                 QtyKecil = 100 + noUrut,

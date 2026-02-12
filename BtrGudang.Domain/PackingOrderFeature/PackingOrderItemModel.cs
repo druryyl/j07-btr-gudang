@@ -4,7 +4,7 @@ namespace BtrGudang.Domain.PackingOrderFeature
 {
     public class PackingOrderItemModel
     {
-        public PackingOrderItemModel(int noUrut, BrgType brg, QtyType qtyBesar, QtyType qtyKecil,
+        public PackingOrderItemModel(int noUrut, BrgReff brg, QtyType qtyBesar, QtyType qtyKecil,
             string depoId)
         {
             NoUrut = noUrut;
@@ -14,7 +14,7 @@ namespace BtrGudang.Domain.PackingOrderFeature
             DepoId = depoId;
         }
         public int NoUrut { get; }
-        public BrgType Brg { get; }
+        public BrgReff Brg { get; }
         public QtyType QtyBesar { get; }
         public QtyType QtyKecil { get; }
         public string DepoId { get; }

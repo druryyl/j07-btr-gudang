@@ -37,10 +37,15 @@ namespace BtrGudang.Infrastructure.PackingOrderFeature
                 bcp.AddMap("BrgId","BrgId");
                 bcp.AddMap("BrgCode","BrgCode");
                 bcp.AddMap("BrgName","BrgName");
+
+                bcp.AddMap("Kategori", "Kategori");
+                bcp.AddMap("Supplier", "Supplier");
+
                 bcp.AddMap("QtyBesar", "QtyBesar");
                 bcp.AddMap("SatBesar", "SatBesar");
                 bcp.AddMap("QtyKecil", "QtyKecil");
                 bcp.AddMap("SatKecil", "SatKecil");
+                
                 bcp.AddMap("DepoId", "DepoId");
 
                 var fetched = listDto.ToList();
@@ -72,6 +77,7 @@ namespace BtrGudang.Infrastructure.PackingOrderFeature
                 SELECT
                     PackingOrderId, NoUrut, 
                     BrgId, BrgCode, BrgName,
+                    Kategori, Supplier,
                     QtyBesar, SatBesar,
                     QtyKecil, SatKecil,
                     DepoId
