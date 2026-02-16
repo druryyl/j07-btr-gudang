@@ -4,6 +4,7 @@ using BtrGudang.Helper.Common;
 using BtrGudang.Winform.Infrastructure;
 using Dapper;
 using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -17,6 +18,8 @@ namespace BtrGudang.Infrastructure.PackingOrderFeature
         IGetData<PackingOrderDto, IPackingOrderKey>,
         IListData<PackingOrderDto, Periode>
     {
+        IEnumerable<PackingOrderView> ListDataView(Periode periode);
+        IEnumerable<PackingOrderView> ListByDownloadTimestamp(DateTime downloadTimestamp);
     }
 
     public class PackingOrderDal : IPackingOrderDal
@@ -186,6 +189,50 @@ namespace BtrGudang.Infrastructure.PackingOrderFeature
             using (var conn = new SqlConnection(ConnStringHelper.Get(_opt)))
             {
                 return conn.Read<PackingOrderDto>(sql, dp);
+            }
+        }
+
+        public IEnumerable<PackingOrderView> ListDataView(Periode periode)
+        {
+            const string sql = @"
+                SELECT
+                    PackingOrderId, FakturCode, FakturDate,
+                    CustomerCode, CustomerName, 
+                    Alamat, DownloadTimestamp
+                FROM BTRG_PackingOrder
+                WHERE FakturDate BETWEEN @Tgl1 AND @Tgl2
+                ";
+
+            var dp = new DynamicParameters();
+            dp.AddParam("@Tgl1", periode.Tgl1, SqlDbType.DateTime);
+            dp.AddParam("@Tgl2", periode.Tgl2, SqlDbType.DateTime);
+
+            using (var conn = new SqlConnection(ConnStringHelper.Get(_opt)))
+            {
+                return conn.Read<PackingOrderView>(sql, dp);
+            }
+        }
+
+        public IEnumerable<PackingOrderView> ListByDownloadTimestamp(DateTime downloadTimestamp)
+        {
+            const string sql = @"
+                SELECT
+                    PackingOrderId, FakturCode, FakturDate,
+                    CustomerCode, CustomerName, 
+                    Alamat, DownloadTimestamp
+                FROM BTRG_PackingOrder
+                WHERE DownloadTimestamp BETWEEN @Tgl1 AND @Tgl2
+                ";
+
+            var dp = new DynamicParameters();
+            var startDate = downloadTimestamp.Date;
+            var endDate = downloadTimestamp.Date.AddDays(1).AddSeconds(-1);
+            dp.AddParam("@Tgl1", startDate, SqlDbType.DateTime);
+            dp.AddParam("@Tgl2", endDate, SqlDbType.DateTime);
+
+            using (var conn = new SqlConnection(ConnStringHelper.Get(_opt)))
+            {
+                return conn.Read<PackingOrderView>(sql, dp);
             }
         }
     }

@@ -1,0 +1,200 @@
+﻿namespace BtrGudang.Winform.Forms
+{
+    partial class PK1PrintPackingOrderForm
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            this.Tgl1DatePicker = new System.Windows.Forms.DateTimePicker();
+            this.Tgl2DatePicker = new System.Windows.Forms.DateTimePicker();
+            this.ListFakturButton = new System.Windows.Forms.Button();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.AllFakturPage = new System.Windows.Forms.TabPage();
+            this.PerSupplierPage = new System.Windows.Forms.TabPage();
+            this.PerFakturPage = new System.Windows.Forms.TabPage();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.AllFakturGrid = new System.Windows.Forms.DataGridView();
+            this.button2 = new System.Windows.Forms.Button();
+            this.PerSupplierFlowPanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.tabControl1.SuspendLayout();
+            this.AllFakturPage.SuspendLayout();
+            this.PerSupplierPage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.AllFakturGrid)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // Tgl1DatePicker
+            // 
+            this.Tgl1DatePicker.CustomFormat = "ddd, dd-MM-yyyy";
+            this.Tgl1DatePicker.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.Tgl1DatePicker.Location = new System.Drawing.Point(12, 12);
+            this.Tgl1DatePicker.Name = "Tgl1DatePicker";
+            this.Tgl1DatePicker.Size = new System.Drawing.Size(123, 22);
+            this.Tgl1DatePicker.TabIndex = 1;
+            // 
+            // Tgl2DatePicker
+            // 
+            this.Tgl2DatePicker.CustomFormat = "ddd, dd-MM-yyyy";
+            this.Tgl2DatePicker.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.Tgl2DatePicker.Location = new System.Drawing.Point(141, 12);
+            this.Tgl2DatePicker.Name = "Tgl2DatePicker";
+            this.Tgl2DatePicker.Size = new System.Drawing.Size(123, 22);
+            this.Tgl2DatePicker.TabIndex = 2;
+            // 
+            // ListFakturButton
+            // 
+            this.ListFakturButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(120)))), ((int)(((byte)(215)))));
+            this.ListFakturButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.ListFakturButton.ForeColor = System.Drawing.Color.WhiteSmoke;
+            this.ListFakturButton.Location = new System.Drawing.Point(270, 12);
+            this.ListFakturButton.Name = "ListFakturButton";
+            this.ListFakturButton.Size = new System.Drawing.Size(75, 23);
+            this.ListFakturButton.TabIndex = 3;
+            this.ListFakturButton.Text = "List Faktur";
+            this.ListFakturButton.UseVisualStyleBackColor = false;
+            // 
+            // tabControl1
+            // 
+            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tabControl1.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
+            this.tabControl1.Controls.Add(this.AllFakturPage);
+            this.tabControl1.Controls.Add(this.PerSupplierPage);
+            this.tabControl1.Controls.Add(this.PerFakturPage);
+            this.tabControl1.Location = new System.Drawing.Point(12, 41);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(776, 397);
+            this.tabControl1.TabIndex = 5;
+            // 
+            // AllFakturPage
+            // 
+            this.AllFakturPage.Controls.Add(this.button2);
+            this.AllFakturPage.Controls.Add(this.AllFakturGrid);
+            this.AllFakturPage.Controls.Add(this.textBox1);
+            this.AllFakturPage.Location = new System.Drawing.Point(4, 25);
+            this.AllFakturPage.Name = "AllFakturPage";
+            this.AllFakturPage.Padding = new System.Windows.Forms.Padding(3);
+            this.AllFakturPage.Size = new System.Drawing.Size(768, 368);
+            this.AllFakturPage.TabIndex = 0;
+            this.AllFakturPage.Text = "All Faktur";
+            // 
+            // PerSupplierPage
+            // 
+            this.PerSupplierPage.Controls.Add(this.PerSupplierFlowPanel);
+            this.PerSupplierPage.Location = new System.Drawing.Point(4, 25);
+            this.PerSupplierPage.Name = "PerSupplierPage";
+            this.PerSupplierPage.Padding = new System.Windows.Forms.Padding(3);
+            this.PerSupplierPage.Size = new System.Drawing.Size(768, 368);
+            this.PerSupplierPage.TabIndex = 1;
+            this.PerSupplierPage.Text = "Per Supplier";
+            this.PerSupplierPage.UseVisualStyleBackColor = true;
+            // 
+            // PerFakturPage
+            // 
+            this.PerFakturPage.Location = new System.Drawing.Point(4, 25);
+            this.PerFakturPage.Name = "PerFakturPage";
+            this.PerFakturPage.Size = new System.Drawing.Size(768, 368);
+            this.PerFakturPage.TabIndex = 2;
+            this.PerFakturPage.Text = "Per Faktur";
+            this.PerFakturPage.UseVisualStyleBackColor = true;
+            // 
+            // textBox1
+            // 
+            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBox1.Location = new System.Drawing.Point(6, 343);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(323, 22);
+            this.textBox1.TabIndex = 0;
+            // 
+            // AllFakturGrid
+            // 
+            this.AllFakturGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.AllFakturGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.AllFakturGrid.Location = new System.Drawing.Point(8, 6);
+            this.AllFakturGrid.Name = "AllFakturGrid";
+            this.AllFakturGrid.Size = new System.Drawing.Size(754, 331);
+            this.AllFakturGrid.TabIndex = 1;
+            // 
+            // button2
+            // 
+            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.button2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(125)))), ((int)(((byte)(50)))));
+            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button2.ForeColor = System.Drawing.Color.WhiteSmoke;
+            this.button2.Location = new System.Drawing.Point(335, 343);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 4;
+            this.button2.Text = "Search";
+            this.button2.UseVisualStyleBackColor = false;
+            // 
+            // PerSupplierFlowPanel
+            // 
+            this.PerSupplierFlowPanel.Location = new System.Drawing.Point(6, 6);
+            this.PerSupplierFlowPanel.Name = "PerSupplierFlowPanel";
+            this.PerSupplierFlowPanel.Size = new System.Drawing.Size(756, 359);
+            this.PerSupplierFlowPanel.TabIndex = 0;
+            // 
+            // PK1PrintPackingOrderForm
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.tabControl1);
+            this.Controls.Add(this.ListFakturButton);
+            this.Controls.Add(this.Tgl2DatePicker);
+            this.Controls.Add(this.Tgl1DatePicker);
+            this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Name = "PK1PrintPackingOrderForm";
+            this.Text = "Print Packing Order";
+            this.tabControl1.ResumeLayout(false);
+            this.AllFakturPage.ResumeLayout(false);
+            this.AllFakturPage.PerformLayout();
+            this.PerSupplierPage.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.AllFakturGrid)).EndInit();
+            this.ResumeLayout(false);
+
+        }
+
+        #endregion
+        private System.Windows.Forms.DateTimePicker Tgl1DatePicker;
+        private System.Windows.Forms.DateTimePicker Tgl2DatePicker;
+        private System.Windows.Forms.Button ListFakturButton;
+        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabPage AllFakturPage;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.DataGridView AllFakturGrid;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TabPage PerSupplierPage;
+        private System.Windows.Forms.TabPage PerFakturPage;
+        private System.Windows.Forms.FlowLayoutPanel PerSupplierFlowPanel;
+    }
+}

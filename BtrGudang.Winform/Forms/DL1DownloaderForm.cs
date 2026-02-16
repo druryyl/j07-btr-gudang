@@ -1,7 +1,12 @@
+using BtrGudang.AppTier.PackingOrderFeature;
+using BtrGudang.Domain.PackingOrderFeature;
 using BtrGudang.Helper.Common;
+using BtrGudang.Infrastructure.PackingOrderFeature;
 using BtrGudang.Winform.Services;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,12 +14,13 @@ using System.Windows.Forms;
 
 namespace PackingOrderDownloader
 {
-    public partial class DownloadPackingOrder2Form : Form
+    public partial class DL1DownloaderForm : Form
     {
         // Timers
         private System.Windows.Forms.Timer _downloadTimer;
         private System.Windows.Forms.Timer _clockTimer;
         private RegistryHelper _registryHelper;
+        private IPackingOrderRepo _packingOrderRepo;
 
         // Service and state management
         private DateTime _nextScheduledExecution;
@@ -26,20 +32,40 @@ namespace PackingOrderDownloader
         private readonly PackingOrderDownloaderSvc _packingOrderDownloaderSvc;
 
 
-        public DownloadPackingOrder2Form(PackingOrderDownloaderSvc packingOrderDownloaderSvc)
+        public DL1DownloaderForm(PackingOrderDownloaderSvc packingOrderDownloaderSvc, 
+            IPackingOrderRepo packingOrderRepo)
         {
             _registryHelper = new RegistryHelper();
             _depoId = _registryHelper.ReadString("DepoId");
-            _lastTimestamp = DateTime.Now.Date.AddDays(-3);
+
             _packingOrderDownloaderSvc = packingOrderDownloaderSvc;
+            _packingOrderRepo = packingOrderRepo;
 
             InitializeComponent();
             InitializeTimers();
+            LoadLastTimestamp();
             ScheduleNextExecution();
+
 
             // Log initial message
             LogMessage("Application started successfully", LogLevel.Info);
             LogMessage($"Automatic download interval: {DOWNLOAD_INTERVAL_MILLISECONDS / 1000 / 60} minutes", LogLevel.Info);
+            _packingOrderRepo = packingOrderRepo;
+        }
+
+        private void LoadLastTimestamp()
+        {
+            var defaultLast = DateTime.Now.Date.AddDays(-3);
+            var formatDt = "yyyy-MM-dd HH:mm:ss";
+            var lastTimestampStr = _registryHelper.ReadString("LastDownloadPackingOrderTimestamp", defaultLast.ToString(formatDt));
+            var isValidDate = DateTime.TryParseExact(lastTimestampStr, formatDt,
+                CultureInfo.InvariantCulture, DateTimeStyles.None, out var lastTimestampDt);
+            _lastTimestamp = isValidDate ? lastTimestampDt : defaultLast;
+        }
+        private void RememberLastTimestamp(DateTime lastTimestamp)
+        {
+            var lastTimestampStr = lastTimestamp.ToString("yyyy-MM-dd HH:mm:ss");
+            _registryHelper.WriteString("LastDownloadPackingOrderTimestamp", lastTimestampStr);
         }
 
         private void InitializeTimers()
@@ -91,21 +117,17 @@ namespace PackingOrderDownloader
                 UpdateUIState(isExecuting: true);
 
                 string executionType = isManual ? "Manual" : "Scheduled";
-                LogMessage($"========== {executionType} Download Started ==========", LogLevel.Info);
-                LogMessage($"Execution Time: {DateTime.Now:yyyy-MM-dd HH:mm:ss.fff}", LogLevel.Info);
-
-                // Create period for today
-                var periode = new Periode(DateTime.Now);
-                LogMessage($"Period: {periode.Tgl1:yyyy-MM-dd HH:mm:ss} to {periode.Tgl2:yyyy-MM-dd HH:mm:ss}", LogLevel.Info);
+                LogMessage($"Download Started...", LogLevel.Info);
 
                 // Execute the service call
                 var (success, message, lastTimestamp, orders) = await _packingOrderDownloaderSvc.Execute(_lastTimestamp, _depoId, 100);
-                _lastTimestamp = lastTimestamp;
+                _lastTimestamp = GetNextSecond(lastTimestamp);
 
                 // Log results
                 if (success)
                 {
-                    LogMessage($"[SUCCESS] {message}", LogLevel.Success);
+                    SavePackingOrder(orders);
+                    LogMessage($"SUCCESS {message}", LogLevel.Success);
                     LogMessage($"Records retrieved: {orders.Count()}", LogLevel.Info);
                 }
                 else
@@ -119,8 +141,8 @@ namespace PackingOrderDownloader
                     ScheduleNextExecution();
                 }
                 
-                LogMessage($"Next scheduled execution: {_nextScheduledExecution:HH:mm:ss}", LogLevel.Info);
-                LogMessage($"========== {executionType} Download Completed ==========\n", LogLevel.Info);
+                LogMessage($"Next download: {_nextScheduledExecution:HH:mm:ss}", LogLevel.Info);
+                RememberLastTimestamp(_lastTimestamp);
             }
             catch (Exception ex)
             {
@@ -135,6 +157,16 @@ namespace PackingOrderDownloader
             }
         }
 
+        private void SavePackingOrder(IEnumerable<PackingOrderModel> listPackingOrder)
+        {
+            foreach(var packingOrder in listPackingOrder)
+                _packingOrderRepo.SaveChanges(packingOrder);
+        }
+
+        static DateTime GetNextSecond(DateTime dt)
+        {
+            return dt.AddSeconds(1).AddTicks(-(dt.AddSeconds(1).Ticks % TimeSpan.TicksPerSecond));
+        }
         private void ScheduleNextExecution()
         {
             _nextScheduledExecution = DateTime.Now.AddMilliseconds(DOWNLOAD_INTERVAL_MILLISECONDS);
@@ -192,7 +224,7 @@ namespace PackingOrderDownloader
             _logTextBox.SelectionStart = _logTextBox.TextLength;
             _logTextBox.SelectionLength = 0;
             _logTextBox.SelectionColor = color;
-            _logTextBox.AppendText(message + Environment.NewLine);
+            _logTextBox.AppendText($"[{DateTime.Now:HH:mm:ss}] {message}{Environment.NewLine}");
             _logTextBox.SelectionColor = _logTextBox.ForeColor;
 
             // Auto-scroll to bottom

@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace PackingOrderDownloader
 {
-    partial class DownloadPackingOrder2Form
+    partial class DL1DownloaderForm
     {
         /// <summary>
         /// Required designer variable.

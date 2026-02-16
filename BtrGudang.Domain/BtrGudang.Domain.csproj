@@ -47,6 +47,7 @@
     <Compile Include="PackingOrderFeature\LocationType.cs" />
     <Compile Include="PackingOrderFeature\PackingOrderItemModel.cs" />
     <Compile Include="PackingOrderFeature\PackingOrderModel.cs" />
+    <Compile Include="PackingOrderFeature\PackingOrderView.cs" />
     <Compile Include="PackingOrderFeature\QtyType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

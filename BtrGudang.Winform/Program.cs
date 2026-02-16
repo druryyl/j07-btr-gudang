@@ -1,5 +1,8 @@
-﻿using BtrGudang.Infrastructure.Helpers;
+﻿using BtrGudang.AppTier.PackingOrderFeature;
+using BtrGudang.Infrastructure.Helpers;
+using BtrGudang.Infrastructure.PackingOrderFeature;
 using BtrGudang.Winform.BtrGudang.Winform.Services;
+using BtrGudang.Winform.Forms;
 using BtrGudang.Winform.Infrastructure;
 using BtrGudang.Winform.Services;
 using Microsoft.Extensions.Configuration;
@@ -46,10 +49,16 @@ namespace BtrGudang.Winform
             
             //  Register services
             services.AddTransient<PackingOrderDownloaderSvc, PackingOrderDownloaderSvc>();
+            services.AddScoped<IPackingOrderRepo, PackingOrderRepo>();
+            services.AddScoped<IPackingOrderDal, PackingOrderDal>();
+            services.AddScoped<IPackingOrderItemDal, PackingOrderItemDal>();
+
 
             // Register forms
             services.AddSingleton<IFormFactory, FormFactory>();
-            services.AddTransient<DownloadPackingOrder2Form>();
+            services.AddTransient<DL1DownloaderForm>();
+            services.AddTransient<DL2DownloadPackingOrderInfoForm>();
+            services.AddTransient<PK1PrintPackingOrderForm>();
             services.AddTransient<MainForm>();
 
         }

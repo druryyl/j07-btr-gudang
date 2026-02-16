@@ -13,5 +13,7 @@ namespace BtrGudang.AppTier.PackingOrderFeature
         IDeleteEntity<IPackingOrderKey>,
         ILoadEntity<PackingOrderModel, IPackingOrderKey>
     {
+        IEnumerable<PackingOrderView> ListData(Periode periode);
+        IEnumerable<PackingOrderView> ListByDownloadTimestamp(DateTime downloadTimestamp);
     }
 }

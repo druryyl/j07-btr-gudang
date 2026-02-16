@@ -2,6 +2,7 @@
 using BtrGudang.Domain.PackingOrderFeature;
 using BtrGudang.Helper.Common;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace BtrGudang.Infrastructure.PackingOrderFeature
@@ -48,6 +49,16 @@ namespace BtrGudang.Infrastructure.PackingOrderFeature
                 .ToList();
             var model = hdr?.ToModel(listDtlModel);
             return MayBe.From(model);
+        }
+
+        public IEnumerable<PackingOrderView> ListData(Periode periode)
+        {
+            return _packingOrderDal.ListDataView(periode);
+        }
+
+        public IEnumerable<PackingOrderView> ListByDownloadTimestamp(DateTime downloadTimestamp)
+        {
+            return _packingOrderDal.ListByDownloadTimestamp(downloadTimestamp);
         }
     }
 }
