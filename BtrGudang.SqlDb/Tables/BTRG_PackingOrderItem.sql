@@ -15,8 +15,7 @@
 	SatKecil VARCHAR(10) NOT NULL CONSTRAINT DF_BTRG_PackingOrderItem_SatKecil DEFAULT (''),
 
 	DepoId VARCHAR(3) NOT NULL CONSTRAINT DF_BTR_PackingOrderItem_DepoId DEFAULT(''),
-	PrintTimestamp DATETIME NOT NULL CONSTRAINT DF_BTR_PackingOrderItem_PrintTimestamp DEFAULT('3000-01-01'),
-	PrintId VARCHAR(16) NOT NULL CONSTRAINT DF_BTR_PackingOrderItem_PrintId DEFAULT(''),
+	PrintLogId VARCHAR(26) NOT NULL CONSTRAINT DF_BTR_PackingOrderItem_PrintLogId DEFAULT(''),
 
 	CONSTRAINT PK_BTRG_PackingOrderItem PRIMARY KEY CLUSTERED (PackingOrderId, NoUrut)
 )

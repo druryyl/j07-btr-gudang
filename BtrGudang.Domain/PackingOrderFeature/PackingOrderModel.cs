@@ -18,6 +18,7 @@ namespace BtrGudang.Domain.PackingOrderFeature
             FakturReff faktur,
             DateTime downloadTimestamp,
             string offoiceCode,
+            string printLogId,
             IEnumerable<PackingOrderItemModel> listItem)
         {
             PackingOrderId = packingOrderId;
@@ -27,6 +28,7 @@ namespace BtrGudang.Domain.PackingOrderFeature
             Faktur = faktur;
             DownloadTimestamp = downloadTimestamp;
             OfficeCode = offoiceCode;
+            PrintLogId = printLogId;
             _listItem = listItem.ToList();
         }
 
@@ -38,6 +40,7 @@ namespace BtrGudang.Domain.PackingOrderFeature
             FakturReff.Default,
             new DateTime(3000,1,1),
             "-",
+            string.Empty,
             Enumerable.Empty<PackingOrderItemModel>());
 
         public static IPackingOrderKey Key(string id)
@@ -54,6 +57,25 @@ namespace BtrGudang.Domain.PackingOrderFeature
         public FakturReff Faktur { get; private set; }
         public DateTime DownloadTimestamp { get; private set; }
         public string OfficeCode { get; private set;  }
+        public string PrintLogId { get; private set;  }
+        
+        public void PrintLogFaktur(PrintLogType printLog)
+        {
+            if (printLog.DocType != "PER-FAKTUR")
+                return;
+            PrintLogId = printLog.PrintLogId;
+        }
+        public void PrintLogBrg(PrintLogType printLog, string brgId)
+        {
+            if (printLog.DocType != "PER-SUPPLIER")
+                return;
+
+            foreach (var item in _listItem)
+                if (item.Brg.BrgId == brgId)
+                    item.PrintLogBrg(printLog);
+
+        }
+
         public IEnumerable<PackingOrderItemModel> ListItem => _listItem;
     }
 

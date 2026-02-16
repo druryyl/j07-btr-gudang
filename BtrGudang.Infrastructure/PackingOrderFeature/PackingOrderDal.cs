@@ -39,13 +39,13 @@ namespace BtrGudang.Infrastructure.PackingOrderFeature
                     CustomerId, CustomerCode, CustomerName, Alamat, NoTelp,
                     Latitude, Longitude, Accuracy,
                     FakturId, FakturCode, FakturDate, AdminName,
-                    DownloadTimestamp, OfficeCode)
+                    DownloadTimestamp, OfficeCode, PrintLogId)
                 VALUES(
                     @PackingOrderId, @PackingOrderDate, 
                     @CustomerId, @CustomerCode, @CustomerName, @Alamat, @NoTelp,
                     @Latitude, @Longitude, @Accuracy,
                     @FakturId, @FakturCode, @FakturDate, @AdminName,
-                    @DownloadTimestamp, @OfficeCode)
+                    @DownloadTimestamp, @OfficeCode, @PrintLogId)
                 ";
             var dp = new DynamicParameters();
             dp.AddParam("@PackingOrderId", dto.PackingOrderId, SqlDbType.VarChar);
@@ -68,6 +68,7 @@ namespace BtrGudang.Infrastructure.PackingOrderFeature
 
             dp.AddParam("@DownloadTimestamp", dto.DownloadTimestamp, SqlDbType.DateTime);
             dp.AddParam("@OfficeCode", dto.OfficeCode, SqlDbType.VarChar);
+            dp.AddParam("@PrintLogId", dto.PrintLogId, SqlDbType.VarChar);
 
             var connStr = ConnStringHelper.Get(_opt);
             using (var conn = new SqlConnection(connStr))
@@ -98,7 +99,8 @@ namespace BtrGudang.Infrastructure.PackingOrderFeature
                     AdminName = @AdminName,
 
                     DownloadTimestamp = @DownloadTimestamp,
-                    OfficeCode = @OfficeCode
+                    OfficeCode = @OfficeCode,
+                    PrintLogId = @PrintLogId
                 WHERE
                     PackingOrderId = @PackingOrderId
                 ";
@@ -124,6 +126,7 @@ namespace BtrGudang.Infrastructure.PackingOrderFeature
 
             dp.AddParam("@DownloadTimestamp", dto.DownloadTimestamp, SqlDbType.DateTime);
             dp.AddParam("@OfficeCode", dto.OfficeCode, SqlDbType.VarChar);
+            dp.AddParam("@PrintLogId", dto.PrintLogId, SqlDbType.VarChar);
 
             using (var conn = new SqlConnection(ConnStringHelper.Get(_opt)))
             {
@@ -155,7 +158,7 @@ namespace BtrGudang.Infrastructure.PackingOrderFeature
                     CustomerId, CustomerCode, CustomerName, Alamat, NoTelp,
                     Latitude, Longitude, Accuracy,
                     FakturId, FakturCode, FakturDate, AdminName,
-                    DownloadTimestamp, OfficeCode
+                    DownloadTimestamp, OfficeCode, PrintLogId
                 FROM BTRG_PackingOrder
                 WHERE PackingOrderId = @PackingOrderId
                 ";
@@ -177,7 +180,7 @@ namespace BtrGudang.Infrastructure.PackingOrderFeature
                     CustomerId, CustomerCode, CustomerName, Alamat, NoTelp,
                     Latitude, Longitude, Accuracy,
                     FakturId, FakturCode, FakturDate, AdminName,
-                    DownloadTimestamp, OfficeCode
+                    DownloadTimestamp, OfficeCode, PrintLogId
                 FROM BTRG_PackingOrder
                 WHERE PackingOrderDate BETWEEN @Tgl1 AND @Tgl2
                 ";
@@ -198,7 +201,7 @@ namespace BtrGudang.Infrastructure.PackingOrderFeature
                 SELECT
                     PackingOrderId, FakturCode, FakturDate,
                     CustomerCode, CustomerName, 
-                    Alamat, DownloadTimestamp
+                    Alamat, DownloadTimestamp, PrintLogId
                 FROM BTRG_PackingOrder
                 WHERE FakturDate BETWEEN @Tgl1 AND @Tgl2
                 ";
@@ -219,7 +222,7 @@ namespace BtrGudang.Infrastructure.PackingOrderFeature
                 SELECT
                     PackingOrderId, FakturCode, FakturDate,
                     CustomerCode, CustomerName, 
-                    Alamat, DownloadTimestamp
+                    Alamat, DownloadTimestamp, PrintLogId
                 FROM BTRG_PackingOrder
                 WHERE DownloadTimestamp BETWEEN @Tgl1 AND @Tgl2
                 ";

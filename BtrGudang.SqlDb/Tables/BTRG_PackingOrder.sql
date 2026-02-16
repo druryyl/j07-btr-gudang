@@ -21,8 +21,7 @@
 	DownloadTimestamp DATETIME NOT NULL CONSTRAINT DF_BTR_PackingOrder_DownloadTimestamp DEFAULT ('3000-01-01'),
 	OfficeCode VARCHAR(3) NOT NULL CONSTRAINT DF_BTR_PackingOrder_OfficeCode DEFAULT(''),
 
-	PrintTimestamp DATETIME NOT NULL CONSTRAINT DF_BTR_PackingOrder_PrintTimestamp DEFAULT('3000-01-01'),
-	PrintId VARCHAR(26) NOT NULL CONSTRAINT DF_BTR_PackingOrder_PrintId DEFAULT(''),
+	PrintLogId VARCHAR(26) NOT NULL CONSTRAINT DF_BTR_PackingOrder_PrintLogId DEFAULT(''),
 
 	CONSTRAINT PK_BTRG_PackingOrder PRIMARY KEY CLUSTERED (PackingOrderId)
 )

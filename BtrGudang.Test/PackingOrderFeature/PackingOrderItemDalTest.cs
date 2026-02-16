@@ -36,7 +36,8 @@ namespace BtrGudang.Test.PackingOrderFeature
                 SatBesar = "PCS",
                 QtyKecil = 100 + noUrut,
                 SatKecil = "UNIT",
-                DepoId = "JOG"
+                DepoId = "JOG", 
+                PrintLogId = "01AN4Z07BY79KA1307SR9X4MV3"
             };
 
             return result;

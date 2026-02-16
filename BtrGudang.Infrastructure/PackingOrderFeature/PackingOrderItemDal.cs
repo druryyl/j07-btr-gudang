@@ -45,7 +45,9 @@ namespace BtrGudang.Infrastructure.PackingOrderFeature
                 bcp.AddMap("SatBesar", "SatBesar");
                 bcp.AddMap("QtyKecil", "QtyKecil");
                 bcp.AddMap("SatKecil", "SatKecil");
-                
+                bcp.AddMap("PrintLogId", "PrintLogId");
+
+
                 bcp.AddMap("DepoId", "DepoId");
 
                 var fetched = listDto.ToList();
@@ -80,7 +82,7 @@ namespace BtrGudang.Infrastructure.PackingOrderFeature
                     Kategori, Supplier,
                     QtyBesar, SatBesar,
                     QtyKecil, SatKecil,
-                    DepoId
+                    DepoId, PrintLogId
                 FROM BTRG_PackingOrderItem
                 WHERE PackingOrderId = @PackingOrderId
                 ORDER BY NoUrut

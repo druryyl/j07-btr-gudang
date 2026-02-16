@@ -116,11 +116,11 @@ namespace BtrGudang.Winform.Services
                 x.NoUrut, new BrgReff(x.BrgId, x.BrgCode, x.BrgNme, x.KategoriName, x.SupplierName),
                 new Domain.QtyType(x.QtyBesar, x.SatBesar),
                 new Domain.QtyType(x.QtyKecil, x.SatKecil),
-                x.DepoId));
+                x.DepoId, string.Empty));
 
             var result = new PackingOrderModel(
                 PackingOrderId, packingOrderDate, customer, location, faktur,
-                DateTime.Now, OfficeCode, listItem);
+                DateTime.Now, OfficeCode, string.Empty, listItem);
             return result;
         }
     }

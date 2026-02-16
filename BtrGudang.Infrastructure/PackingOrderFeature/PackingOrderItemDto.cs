@@ -21,6 +21,7 @@ namespace BtrGudang.Infrastructure.PackingOrderFeature
         public int QtyKecil { get; set; }
         public string SatKecil { get; set; }
         public string DepoId { get; set; }
+        public string PrintLogId { get; set; }
 
         public static PackingOrderItemDto FromModel(PackingOrderItemModel model, string packingorderId)
         {
@@ -39,7 +40,8 @@ namespace BtrGudang.Infrastructure.PackingOrderFeature
                 SatBesar = model.QtyBesar.Satuan,
                 QtyKecil = model.QtyKecil.Qty,
                 SatKecil = model.QtyKecil.Satuan,
-                DepoId   = model.DepoId
+                DepoId   = model.DepoId,
+                PrintLogId = model.PrintLogId,
             };
         }
 
@@ -49,7 +51,7 @@ namespace BtrGudang.Infrastructure.PackingOrderFeature
             var qtyBesar = new QtyType(QtyBesar, SatBesar);
             var qtyKecil = new QtyType(QtyKecil, SatKecil);
 
-            return new PackingOrderItemModel(NoUrut, brg, qtyBesar, qtyKecil, DepoId);
+            return new PackingOrderItemModel(NoUrut, brg, qtyBesar, qtyKecil, DepoId, PrintLogId);
         }
     }
 }

@@ -41,6 +41,7 @@ namespace BtrGudang.Test.PackingOrderFeature
                 Accuracy = 7,
                 DownloadTimestamp = new DateTime(2026,2,12),
                 OfficeCode = "R",
+                PrintLogId = "01AN4Z07BY79KA1307SR9X4MV3"
             };
 
             return result;

@@ -35,11 +35,11 @@ namespace BtrGudang.Test.PackingOrderFeature
                 new PackingOrderItemModel(1,
                     new BrgReff("B1", "BRG001", "Barang 1", "Kategori", "Supplier"),
                     new QtyType(10, "PCS"),
-                    new QtyType(100, "UNIT"), "JOG"),
+                    new QtyType(100, "UNIT"), "JOG", "01AN4Z07BY79KA1307SR9X4MV3"),
                 new PackingOrderItemModel(2,
                     new BrgReff("B2", "BRG002", "Barang 2", "Kategori", "Supplier"),
                     new QtyType(5, "PCS"),
-                    new QtyType(50, "UNIT"), "JOG")
+                    new QtyType(50, "UNIT"), "JOG", "01AN4Z07BY79KA1307SR9X4MV4")
             };
 
             return new PackingOrderModel(
@@ -50,6 +50,7 @@ namespace BtrGudang.Test.PackingOrderFeature
                 faktur,
                 new DateTime(2026,2,12),
                 "JOG",
+                "01AN4Z07BY79KA1307SR9X4MV5",
                 items);
         }
 

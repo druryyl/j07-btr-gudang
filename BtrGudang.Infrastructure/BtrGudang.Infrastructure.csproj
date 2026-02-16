@@ -83,6 +83,7 @@
     <Compile Include="PackingOrderFeature\PackingOrderItemDto.cs" />
     <Compile Include="PackingOrderFeature\PackingOrderRepo.cs" />
     <Compile Include="PackingOrderFeature\PackingOrderDal.cs" />
+    <Compile Include="PackingOrderFeature\PrintLogDal.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
