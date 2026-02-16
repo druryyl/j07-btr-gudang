@@ -43,6 +43,7 @@ namespace BtrGudang.Winform.Forms
             ProsesPerSupplier();
         }
 
+        #region Proses Per-Supplier
         private void ProsesPerSupplier()
         {
             var listModel = _allFakturList
@@ -195,10 +196,190 @@ namespace BtrGudang.Winform.Forms
 
             System.Diagnostics.Process.Start(filePath);
         }
+        #endregion
+
+        #region Proses Per-Faktur
         private void PrintPerFakturButton_Click(object sender, EventArgs e)
         {
-
+            var listModel = _allFakturList
+                .Where(x => x.PerFaktur)
+                .Select(x => _packingOrderRepo.LoadEntity(x).Value);
+            var listPerFaktur = PrintPackingOrderPerFakturView
+                .CreateFrom(listModel)?.ToList()
+                ?? new List<PrintPackingOrderPerFakturView>();
+            ExportPerFakturToExcel(listPerFaktur);
         }
+        private void ExportPerFakturToExcel(IEnumerable<PrintPackingOrderPerFakturView> data)
+        {
+            if (data == null || !data.Any())
+            {
+                MessageBox.Show(@"No data to export", @"Information",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            //  Get file path from save dialog
+            string filePath;
+            using (var saveFileDialog = new SaveFileDialog())
+            {
+                saveFileDialog.Filter = @"Excel Files|*.xlsx";
+                saveFileDialog.Title = @"Save Excel File";
+                saveFileDialog.DefaultExt = "xlsx";
+                saveFileDialog.AddExtension = true;
+                saveFileDialog.FileName = $"packing-order-per-faktur-{DateTime.Now:yyyy-MM-dd-HHmm}";
+                if (saveFileDialog.ShowDialog() != DialogResult.OK)
+                    return;
+                filePath = saveFileDialog.FileName;
+            }
+
+            using (IXLWorkbook wb = new XLWorkbook())
+            {
+                var ws = wb.AddWorksheet("Packing Order Per Faktur");
+
+                int currentRow = 1;
+
+                //  Title
+                ws.Cell(currentRow, 1).Value = "PACKING ORDER PER FAKTUR REPORT";
+                ws.Range(currentRow, 1, currentRow, 8).Merge().Style
+                    .Font.SetBold(true)
+                    .Font.SetFontSize(14)
+                    .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+                currentRow += 2;
+
+                foreach (var faktur in data)
+                {
+                    //  Faktur Header Section - All headers on the left
+                    //  Row 1: Faktur Code and Date
+                    ws.Cell(currentRow, 1).Value = "Faktur Code / Date:";
+                    ws.Cell(currentRow, 2).Value = $"{faktur.FakturCode} / {faktur.FakturDate}";
+                    ws.Range(currentRow, 2, currentRow, 8).Merge();
+                    currentRow++;
+
+                    //  Row 2: Customer Code and Name
+                    ws.Cell(currentRow, 1).Value = "Customer Code / Name:";
+                    ws.Cell(currentRow, 2).Value = $"{faktur.CustomerCode} / {faktur.CustomerName}";
+                    ws.Range(currentRow, 2, currentRow, 8).Merge();
+                    currentRow++;
+
+                    //  Row 3: Customer Address
+                    ws.Cell(currentRow, 1).Value = "Customer Address:";
+                    ws.Cell(currentRow, 2).Value = faktur.Alamat;
+                    ws.Range(currentRow, 2, currentRow, 8).Merge();
+                    currentRow++;
+
+                    //  Row 4: Map Location
+                    ws.Cell(currentRow, 1).Value = "Map Location:";
+                    if (!string.IsNullOrEmpty(faktur.Location) && faktur.Location != "-")
+                    {
+                        ws.Cell(currentRow, 2).Value = "Click to open in Google Maps";
+                        ws.Range(currentRow, 2, currentRow, 8).Merge();
+
+                        //  Make it a hyperlink
+                        var linkCell = ws.Cell(currentRow, 2);
+                        linkCell.SetHyperlink(new XLHyperlink(faktur.Location));
+                        linkCell.Style.Font.SetFontColor(XLColor.Blue).Font.SetUnderline();
+                    }
+                    else
+                    {
+                        ws.Cell(currentRow, 2).Value = "-";
+                        ws.Range(currentRow, 2, currentRow, 8).Merge();
+                    }
+
+                    //  Style all header labels
+                    ws.Range(currentRow - 3, 1, currentRow, 1).Style
+                        .Font.SetBold(true)
+                        .Alignment.SetVertical(XLAlignmentVerticalValues.Center);
+
+                    //  Style all header values (merged cells)
+                    ws.Range(currentRow - 3, 2, currentRow, 8).Style
+                        .Border.SetOutsideBorder(XLBorderStyleValues.Medium)
+                        .Border.SetInsideBorder(XLBorderStyleValues.Hair)
+                        .Fill.SetBackgroundColor(XLColor.LightBlue)
+                        .Alignment.SetVertical(XLAlignmentVerticalValues.Center);
+
+                    currentRow += 2; // Add space before items
+
+                    //  Items Table Header - Starting at Column B
+                    ws.Cell(currentRow, 2).Value = "No";
+                    ws.Cell(currentRow, 3).Value = "Brg Code";
+                    ws.Cell(currentRow, 4).Value = "Brg Name";
+                    ws.Cell(currentRow, 5).Value = "Category - Supplier";
+                    ws.Cell(currentRow, 6).Value = "Qty Besar";
+                    ws.Cell(currentRow, 7).Value = "Qty Kecil";
+
+                    //  Style table header
+                    ws.Range(currentRow, 2, currentRow, 7).Style
+                        .Font.SetBold(true)
+                        .Fill.SetBackgroundColor(XLColor.LightGray)
+                        .Border.SetOutsideBorder(XLBorderStyleValues.Medium)
+                        .Border.SetInsideBorder(XLBorderStyleValues.Hair)
+                        .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+
+                    int itemRow = currentRow + 1;
+                    int itemNo = 1;
+
+                    //  Items Data - Starting at Column B
+                    foreach (var brg in faktur.ListBrg)
+                    {
+                        ws.Cell(itemRow, 2).Value = itemNo++;
+                        ws.Cell(itemRow, 3).Value = brg.BrgCode;
+                        ws.Cell(itemRow, 4).Value = brg.BrgName;
+                        ws.Cell(itemRow, 5).Value = brg.KategoriSupplier;
+                        ws.Cell(itemRow, 6).Value = brg.QtyBesar;
+                        ws.Cell(itemRow, 7).Value = brg.QtyKecil;
+
+                        //  Apply borders to item row
+                        ws.Range(itemRow, 2, itemRow, 7).Style
+                            .Border.SetOutsideBorder(XLBorderStyleValues.Thin)
+                            .Border.SetInsideBorder(XLBorderStyleValues.Hair);
+
+                        //  Center align the number column
+                        ws.Cell(itemRow, 2).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+
+                        itemRow++;
+                    }
+
+                    //  Add summary row for this faktur
+                    if (faktur.ListBrg.Any())
+                    {
+                        ws.Cell(itemRow, 5).Value = $"Total Items: {faktur.ListBrg.Count()}";
+                        ws.Range(itemRow, 5, itemRow, 7).Merge().Style
+                            .Font.SetBold(true)
+                            .Fill.SetBackgroundColor(XLColor.LightYellow)
+                            .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Right);
+                        itemRow++;
+                    }
+
+                    currentRow = itemRow + 2; // Add 2 empty rows between fakturs
+                }
+
+                //  Adjust column widths
+                ws.Column(1).Width = 20;  // Header labels
+                ws.Column(2).Width = 5;   // No (starting at B)
+                ws.Column(3).Width = 15;  // Brg Code
+                ws.Column(4).Width = 30;  // Brg Name
+                ws.Column(5).Width = 35;  // Category - Supplier
+                ws.Column(6).Width = 15;  // Qty Besar
+                ws.Column(7).Width = 15;  // Qty Kecil
+                ws.Column(8).Width = 2;   // Spacing
+
+                //  Apply font to all cells
+                ws.RangeUsed().Style.Font.SetFontName("Lucida Console").Font.SetFontSize(9);
+
+                //  Add generation info at the bottom
+                int lastRow = ws.LastRowUsed().RowNumber();
+                ws.Cell(lastRow + 2, 1).Value = $"Report generated: {DateTime.Now:dd-MM-yyyy HH:mm:ss}";
+                ws.Range(lastRow + 2, 1, lastRow + 2, 7).Merge().Style
+                    .Font.SetItalic(true)
+                    .Font.SetFontColor(XLColor.Gray);
+
+                //  Save and open
+                wb.SaveAs(filePath);
+            }
+
+            System.Diagnostics.Process.Start(filePath);
+        }        
+        #endregion
 
         private void InitGrid()
         {
@@ -297,6 +478,7 @@ namespace BtrGudang.Winform.Forms
         }
     }
 
+    #region Binding Data Source View Structure
     public class PK1AllFakturView : IPackingOrderKey, INotifyPropertyChanged
     {
         private bool? _isPersupplier; // Changed to nullable to allow all false state
@@ -391,7 +573,9 @@ namespace BtrGudang.Winform.Forms
             return result;
         }
     }
+#endregion
 
+    #region PrintOut Per-Supplier View Structure
     public class PrintPackingOrderPerSupplierView
     {
         public string Supplier { get; set; }
@@ -470,4 +654,90 @@ namespace BtrGudang.Winform.Forms
         public int SumQtyKecil { get; set; }
         public string SatKecil { get; set; }
     }
+#endregion
+
+    #region PrintOut Per-Faktur View Structure
+    public class PrintPackingOrderPerFakturView
+    {
+        public string FakturCode { get; set; }
+        public string FakturDate { get; set; }
+        public string CustomerCode { get; set; }
+        public string CustomerName { get; set; }
+        public string Alamat { get; set; }
+        public string Location { get; set; }
+        public IEnumerable<PrintPackingOrderPerFakturBrgView> ListBrg { get; set; }
+
+        public static IEnumerable<PrintPackingOrderPerFakturView> CreateFrom(IEnumerable<PackingOrderModel> packingOrders)
+        {
+            if (packingOrders == null)
+                return Enumerable.Empty<PrintPackingOrderPerFakturView>();
+
+            var culture = CultureInfo.InvariantCulture;
+
+            var result = packingOrders
+                .Where(po => po != null)
+                .Select(po => new PrintPackingOrderPerFakturView
+                {
+                    FakturCode = po.Faktur?.FakturCode ?? "-",
+                    FakturDate = po.Faktur?.FakturDate.ToString("dd-MM-yyyy") ?? "-",
+                    CustomerCode = po.Customer?.CustomerCode ?? "-",
+                    CustomerName = po.Customer?.CustomerName ?? "-",
+                    Alamat = po.Customer?.Alamat ?? "-",
+                    Location = GenerateMapLocation(po.Location, culture),
+                    ListBrg = po.ListItem?
+                        .Where(item => item?.Brg != null)
+                        .Select(item => new PrintPackingOrderPerFakturBrgView
+                        {
+                            BrgId = item.Brg.BrgId ?? "-",
+                            BrgCode = item.Brg.BrgCode ?? "-",
+                            BrgName = item.Brg.BrgName ?? "-",
+                            KategoriSupplier = $"{item.Brg.Kategori ?? "-"} - {item.Brg.Supplier ?? "-"}",
+                            QtyBesar = $"{item.QtyBesar?.Qty ?? 0} {item.QtyBesar?.Satuan ?? "-"}",
+                            QtyKecil = $"{item.QtyKecil?.Qty ?? 0} {item.QtyKecil?.Satuan ?? "-"}"
+                        })
+                        .OrderBy(brg => brg.BrgCode)
+                        .ToList() ?? Enumerable.Empty<PrintPackingOrderPerFakturBrgView>()
+                })
+                .OrderBy(faktur => faktur.FakturCode)
+                .ToList();
+
+            return result;
+        }
+
+        private static string GenerateMapLocation(LocationReff location, CultureInfo culture)
+        {
+            if (location == null)
+                return "-";
+
+            // Check if location has valid coordinates (assuming 0,0 means no location)
+            if (location.Latitude == 0 && location.Longitude == 0)
+                return "-";
+
+            try
+            {
+                // Create Google Maps link
+                var mapUri = new Uri(string.Format(culture,
+                    "https://www.google.com/maps?q={0},{1}",
+                    location.Latitude,
+                    location.Longitude));
+
+                return mapUri.ToString();
+            }
+            catch
+            {
+                return "-";
+            }
+        }
+    }
+
+    public class PrintPackingOrderPerFakturBrgView
+    {
+        public string BrgId { get; set; }
+        public string BrgCode { get; set; }
+        public string BrgName { get; set; }
+        public string KategoriSupplier { get; set; }
+        public string QtyBesar { get; set; }
+        public string QtyKecil { get; set; }
+    }
+    #endregion
 }
