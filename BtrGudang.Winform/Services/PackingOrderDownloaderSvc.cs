@@ -99,6 +99,9 @@ namespace BtrGudang.Winform.Services
         public string FakturCode {get;set;}
         public string FakturDate {get;set;}
         public string AdminName {get;set;}
+        public decimal GrandTotal { get; set; }
+        public string DriverId { get; set; }
+        public string DriverName { get; set; }
         public string WarehouseDesc {get;set;}
         public string OfficeCode {get;set;}
         public IEnumerable<PackingOrderDownloadItemResponse> ListItem { get; set;  }
@@ -110,7 +113,8 @@ namespace BtrGudang.Winform.Services
             var location = new LocationReff(Latitude, Longitude, Accuracy);
 
             var fakturDate = DateTime.ParseExact(FakturDate, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-            var faktur = new FakturReff(FakturId, FakturCode, fakturDate, AdminName);
+            var faktur = new FakturReff(FakturId, FakturCode, fakturDate, AdminName, GrandTotal);
+            var driver = new DriverReff(DriverId, DriverName);
 
             var listItem = ListItem.Select(x => new PackingOrderItemModel(
                 x.NoUrut, new BrgReff(x.BrgId, x.BrgCode, x.BrgNme, x.KategoriName, x.SupplierName),
@@ -119,7 +123,7 @@ namespace BtrGudang.Winform.Services
                 x.DepoId, string.Empty));
 
             var result = new PackingOrderModel(
-                PackingOrderId, packingOrderDate, customer, location, faktur,
+                PackingOrderId, packingOrderDate, customer, location, faktur, driver,
                 DateTime.Now, OfficeCode, string.Empty, listItem);
             return result;
         }

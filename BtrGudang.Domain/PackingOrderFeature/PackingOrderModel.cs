@@ -16,6 +16,7 @@ namespace BtrGudang.Domain.PackingOrderFeature
             CustomerReff customer,
             LocationReff location,
             FakturReff faktur,
+            DriverReff driver,
             DateTime downloadTimestamp,
             string offoiceCode,
             string printLogId,
@@ -26,6 +27,7 @@ namespace BtrGudang.Domain.PackingOrderFeature
             Customer = customer;
             Location = location;
             Faktur = faktur;
+            Driver = driver;
             DownloadTimestamp = downloadTimestamp;
             OfficeCode = offoiceCode;
             PrintLogId = printLogId;
@@ -38,6 +40,7 @@ namespace BtrGudang.Domain.PackingOrderFeature
             CustomerReff.Default,
             LocationReff.Default,
             FakturReff.Default,
+            DriverReff.Default,
             new DateTime(3000,1,1),
             "-",
             string.Empty,
@@ -55,6 +58,7 @@ namespace BtrGudang.Domain.PackingOrderFeature
         public CustomerReff Customer { get; private set; }
         public LocationReff Location { get; private set; }
         public FakturReff Faktur { get; private set; }
+        public DriverReff Driver { get; private set; } 
         public DateTime DownloadTimestamp { get; private set; }
         public string OfficeCode { get; private set;  }
         public string PrintLogId { get; private set;  }

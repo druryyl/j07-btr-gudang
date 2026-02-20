@@ -24,6 +24,9 @@ namespace BtrGudang.Infrastructure.PackingOrderFeature
         public string FakturCode { get; set; }
         public DateTime FakturDate { get; set; }
         public string AdminName { get; set; }
+        public decimal GrandTotal { get; set; }
+        public string DriverId { get; set;  }
+        public string DriverName { get; set; }
 
         public DateTime DownloadTimestamp { get; set; }
         public string OfficeCode { get; set; }
@@ -49,7 +52,10 @@ namespace BtrGudang.Infrastructure.PackingOrderFeature
                 FakturCode = model.Faktur.FakturCode,
                 FakturDate = model.Faktur.FakturDate,
                 AdminName = model.Faktur.AdminName,
+                GrandTotal = model.Faktur.GrandTotal,
 
+                DriverId = model.Driver.DriverId,
+                DriverName = model.Driver.DriverName,
                 DownloadTimestamp = model.DownloadTimestamp,
                 OfficeCode = model.OfficeCode,
                 PrintLogId = model.PrintLogId,
@@ -61,7 +67,8 @@ namespace BtrGudang.Infrastructure.PackingOrderFeature
             var customer = new CustomerReff(
                 CustomerId, CustomerCode, CustomerName, Alamat, NoTelp);
             var faktur = new FakturReff(
-                FakturId, FakturCode, FakturDate, AdminName);
+                FakturId, FakturCode, FakturDate, AdminName, GrandTotal);
+            var driver = new DriverReff(DriverId, DriverName);
             var location = new LocationReff(
                 Latitude, Longitude, Accuracy);
             return new PackingOrderModel(
@@ -70,6 +77,7 @@ namespace BtrGudang.Infrastructure.PackingOrderFeature
                 customer,
                 location,
                 faktur,
+                driver,
                 DownloadTimestamp,
                 OfficeCode,
                 PrintLogId,

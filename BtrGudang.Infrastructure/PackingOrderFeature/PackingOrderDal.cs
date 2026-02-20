@@ -38,14 +38,14 @@ namespace BtrGudang.Infrastructure.PackingOrderFeature
                     PackingOrderId, PackingOrderDate, 
                     CustomerId, CustomerCode, CustomerName, Alamat, NoTelp,
                     Latitude, Longitude, Accuracy,
-                    FakturId, FakturCode, FakturDate, AdminName,
-                    DownloadTimestamp, OfficeCode, PrintLogId)
+                    FakturId, FakturCode, FakturDate, AdminName, GrandTotal,
+                    DriverId, DriverName, DownloadTimestamp, OfficeCode, PrintLogId)
                 VALUES(
                     @PackingOrderId, @PackingOrderDate, 
                     @CustomerId, @CustomerCode, @CustomerName, @Alamat, @NoTelp,
                     @Latitude, @Longitude, @Accuracy,
-                    @FakturId, @FakturCode, @FakturDate, @AdminName,
-                    @DownloadTimestamp, @OfficeCode, @PrintLogId)
+                    @FakturId, @FakturCode, @FakturDate, @AdminName, @GrandTotal,
+                    @DriverId, @DriverName, @DownloadTimestamp, @OfficeCode, @PrintLogId)
                 ";
             var dp = new DynamicParameters();
             dp.AddParam("@PackingOrderId", dto.PackingOrderId, SqlDbType.VarChar);
@@ -65,6 +65,10 @@ namespace BtrGudang.Infrastructure.PackingOrderFeature
             dp.AddParam("@FakturCode", dto.FakturCode, SqlDbType.VarChar);
             dp.AddParam("@FakturDate", dto.FakturDate, SqlDbType.DateTime);
             dp.AddParam("@AdminName", dto.AdminName, SqlDbType.VarChar);
+            dp.AddParam("@GrandTotal", dto.GrandTotal, SqlDbType.Decimal);
+
+            dp.AddParam("@DriverId", dto.DriverId, SqlDbType.VarChar);
+            dp.AddParam("@DriverName", dto.DriverName, SqlDbType.VarChar);
 
             dp.AddParam("@DownloadTimestamp", dto.DownloadTimestamp, SqlDbType.DateTime);
             dp.AddParam("@OfficeCode", dto.OfficeCode, SqlDbType.VarChar);
@@ -97,7 +101,10 @@ namespace BtrGudang.Infrastructure.PackingOrderFeature
                     FakturCode = @FakturCode,
                     FakturDate = @FakturDate,
                     AdminName = @AdminName,
+                    GrandTotal = @GrandTotal,
 
+                    DriverId = @DriverId,
+                    DriverName = @DriverName,
                     DownloadTimestamp = @DownloadTimestamp,
                     OfficeCode = @OfficeCode,
                     PrintLogId = @PrintLogId
@@ -123,6 +130,10 @@ namespace BtrGudang.Infrastructure.PackingOrderFeature
             dp.AddParam("@FakturCode", dto.FakturCode, SqlDbType.VarChar);
             dp.AddParam("@FakturDate", dto.FakturDate, SqlDbType.DateTime);
             dp.AddParam("@AdminName", dto.AdminName, SqlDbType.VarChar);
+            dp.AddParam("@GrandTotal", dto.GrandTotal, SqlDbType.Decimal);
+
+            dp.AddParam("@DriverId", dto.DriverId, SqlDbType.VarChar);
+            dp.AddParam("@DriverName", dto.DriverName, SqlDbType.VarChar);
 
             dp.AddParam("@DownloadTimestamp", dto.DownloadTimestamp, SqlDbType.DateTime);
             dp.AddParam("@OfficeCode", dto.OfficeCode, SqlDbType.VarChar);
@@ -157,8 +168,8 @@ namespace BtrGudang.Infrastructure.PackingOrderFeature
                     PackingOrderId, PackingOrderDate, 
                     CustomerId, CustomerCode, CustomerName, Alamat, NoTelp,
                     Latitude, Longitude, Accuracy,
-                    FakturId, FakturCode, FakturDate, AdminName,
-                    DownloadTimestamp, OfficeCode, PrintLogId
+                    FakturId, FakturCode, FakturDate, AdminName, GrandTotal,
+                    DriverId, DriverName, DownloadTimestamp, OfficeCode, PrintLogId
                 FROM BTRG_PackingOrder
                 WHERE PackingOrderId = @PackingOrderId
                 ";
@@ -179,8 +190,8 @@ namespace BtrGudang.Infrastructure.PackingOrderFeature
                     PackingOrderId, PackingOrderDate, 
                     CustomerId, CustomerCode, CustomerName, Alamat, NoTelp,
                     Latitude, Longitude, Accuracy,
-                    FakturId, FakturCode, FakturDate, AdminName,
-                    DownloadTimestamp, OfficeCode, PrintLogId
+                    FakturId, FakturCode, FakturDate, AdminName, GrandTotal,
+                    DriverId, DriverName, DownloadTimestamp, OfficeCode, PrintLogId
                 FROM BTRG_PackingOrder
                 WHERE PackingOrderDate BETWEEN @Tgl1 AND @Tgl2
                 ";
@@ -199,8 +210,8 @@ namespace BtrGudang.Infrastructure.PackingOrderFeature
         {
             const string sql = @"
                 SELECT
-                    PackingOrderId, FakturCode, FakturDate,
-                    CustomerCode, CustomerName, 
+                    PackingOrderId, FakturCode, FakturDate, GrandTotal,
+                    CustomerCode, CustomerName, DriverId, DriverName,
                     Alamat, DownloadTimestamp, PrintLogId
                 FROM BTRG_PackingOrder
                 WHERE FakturDate BETWEEN @Tgl1 AND @Tgl2
@@ -220,8 +231,8 @@ namespace BtrGudang.Infrastructure.PackingOrderFeature
         {
             const string sql = @"
                 SELECT
-                    PackingOrderId, FakturCode, FakturDate,
-                    CustomerCode, CustomerName, 
+                    PackingOrderId, FakturCode, FakturDate, GrandTotal,
+                    CustomerCode, CustomerName, DriverId, DriverName,
                     Alamat, DownloadTimestamp, PrintLogId
                 FROM BTRG_PackingOrder
                 WHERE DownloadTimestamp BETWEEN @Tgl1 AND @Tgl2

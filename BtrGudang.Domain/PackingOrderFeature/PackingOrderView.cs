@@ -11,6 +11,9 @@ namespace BtrGudang.Domain.PackingOrderFeature
         public string PackingOrderId { get; set; }
         public string FakturCode { get; set;  }
         public DateTime FakturDate { get; set; }
+        public decimal GrandTotal { get; set; }
+        public string DriverId { get; set; }
+        public string DriverName { get; set; }
         public string CustomerCode { get; set;  }
         public string CustomerName { get; set; }    
         public string Alamat { get; set; }

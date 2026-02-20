@@ -27,8 +27,9 @@ namespace BtrGudang.Test.PackingOrderFeature
         private PackingOrderModel CreateTestModel()
         {
             var customer = new CustomerReff("C1", "C001", "Customer Test", "Alamat", "08123");
-            var faktur = new FakturReff("F1", "F001", new DateTime(2026, 2, 1), "ADM");
+            var faktur = new FakturReff("F1", "F001", new DateTime(2026, 2, 1), "ADM", 234);
             var location = new LocationReff(1.23, 4.56, 7);
+            var driver = new DriverReff("DR1", "Driver One");
 
             var items = new List<PackingOrderItemModel>
             {
@@ -48,6 +49,7 @@ namespace BtrGudang.Test.PackingOrderFeature
                 customer,
                 location,
                 faktur,
+                driver,
                 new DateTime(2026,2,12),
                 "JOG",
                 "01AN4Z07BY79KA1307SR9X4MV5",

@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Windows.Forms;
 
 namespace BtrGudang.Winform.Forms
@@ -38,12 +39,11 @@ namespace BtrGudang.Winform.Forms
             FilterTextBox.TextChanged += FilterText_TextChanged;
         }
 
+        #region Proses Per-Supplier
         private void PrintPerSupplierButton_Click(object sender, EventArgs e)
         {
             ProsesPerSupplier();
         }
-
-        #region Proses Per-Supplier
         private void ProsesPerSupplier()
         {
             var listModel = _allFakturList
@@ -53,7 +53,6 @@ namespace BtrGudang.Winform.Forms
                 .CreateFrom(listModel)?.ToList() 
                 ?? new List<PrintPackingOrderPerSupplierView>();
             ExportPerSupplierToExcel(listPerSupplier);
-
         }
         private void ExportPerSupplierToExcel(IEnumerable<PrintPackingOrderPerSupplierView> data)
         {
@@ -240,80 +239,79 @@ namespace BtrGudang.Winform.Forms
 
                 //  Title
                 ws.Cell(currentRow, 1).Value = "PACKING ORDER PER FAKTUR REPORT";
-                ws.Range(currentRow, 1, currentRow, 8).Merge().Style
+                ws.Range(currentRow, 1, currentRow, 6).Merge().Style
                     .Font.SetBold(true)
                     .Font.SetFontSize(14)
                     .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
                 currentRow += 2;
 
+                //  Adjust column widths
+                ws.Column(1).Width = 4;   // No 
+                ws.Column(2).Width = 10;  // Brg Code
+                ws.Column(3).Width = 35;  // Brg Name - width increased slightly for better wrapping
+                ws.Column(4).Width = 27;  // Category - Supplier - width increased slightly for better wrapping
+                ws.Column(5).Width = 10;  // Qty Besar
+                ws.Column(6).Width = 10;  // Qty Kecil
+                ws.Column(7).Width = 2;   // Spacing
+
                 foreach (var faktur in data)
                 {
-                    //  Faktur Header Section - All headers on the left
-                    //  Row 1: Faktur Code and Date
-                    ws.Cell(currentRow, 1).Value = "Faktur Code / Date:";
-                    ws.Cell(currentRow, 2).Value = $"{faktur.FakturCode} / {faktur.FakturDate}";
-                    ws.Range(currentRow, 2, currentRow, 8).Merge();
+                    //  Row 1: Customer Code and Name
+                    ws.Cell(currentRow, 1).Value = $"{faktur.CustomerName} ({faktur.CustomerCode} )";
+                    ws.Range(currentRow, 1, currentRow, 6).Merge()
+                        .Style.Font.SetBold(true);
                     currentRow++;
 
-                    //  Row 2: Customer Code and Name
-                    ws.Cell(currentRow, 1).Value = "Customer Code / Name:";
-                    ws.Cell(currentRow, 2).Value = $"{faktur.CustomerCode} / {faktur.CustomerName}";
-                    ws.Range(currentRow, 2, currentRow, 8).Merge();
+                    //  Faktur Header Section - All headers on the left
+                    //  Row 2: Faktur Code and Date
+                    ws.Cell(currentRow, 1).Value = $"No.Faktur: {faktur.FakturCode} / {faktur.FakturDate:dd-MM-yyyy}";
+                    ws.Range(currentRow, 1, currentRow, 6).Merge();
                     currentRow++;
 
                     //  Row 3: Customer Address
-                    ws.Cell(currentRow, 1).Value = "Customer Address:";
-                    ws.Cell(currentRow, 2).Value = faktur.Alamat;
-                    ws.Range(currentRow, 2, currentRow, 8).Merge();
-                    currentRow++;
-
-                    //  Row 4: Map Location
-                    ws.Cell(currentRow, 1).Value = "Map Location:";
+                    ws.Cell(currentRow, 1).Value = $"Alamat   : {faktur.Alamat}";
                     if (!string.IsNullOrEmpty(faktur.Location) && faktur.Location != "-")
                     {
-                        ws.Cell(currentRow, 2).Value = "Click to open in Google Maps";
-                        ws.Range(currentRow, 2, currentRow, 8).Merge();
-
-                        //  Make it a hyperlink
                         var linkCell = ws.Cell(currentRow, 2);
                         linkCell.SetHyperlink(new XLHyperlink(faktur.Location));
                         linkCell.Style.Font.SetFontColor(XLColor.Blue).Font.SetUnderline();
                     }
-                    else
-                    {
-                        ws.Cell(currentRow, 2).Value = "-";
-                        ws.Range(currentRow, 2, currentRow, 8).Merge();
-                    }
+                    ws.Range(currentRow, 1, currentRow, 6).Merge();
+                    currentRow++;
+
+                    //  Row 4: Driver
+                    ws.Cell(currentRow, 1).Value = $"Driver   : {faktur.Driver}";
+                    ws.Range(currentRow, 1, currentRow, 6).Merge();
+
+                    //  set faktur title font to monospace
+                    ws.Range(currentRow - 4, 1, currentRow, 6)
+                        .Style.Font.SetFontName("Lucida Console").Font.SetFontSize(9);
 
                     //  Style all header labels
                     ws.Range(currentRow - 3, 1, currentRow, 1).Style
-                        .Font.SetBold(true)
+                        //.Font.SetBold(true)
                         .Alignment.SetVertical(XLAlignmentVerticalValues.Center);
 
                     //  Style all header values (merged cells)
-                    ws.Range(currentRow - 3, 2, currentRow, 8).Style
-                        .Border.SetOutsideBorder(XLBorderStyleValues.Medium)
-                        .Border.SetInsideBorder(XLBorderStyleValues.Hair)
-                        .Fill.SetBackgroundColor(XLColor.LightBlue)
+                    ws.Range(currentRow - 3, 1, currentRow, 6).Style
                         .Alignment.SetVertical(XLAlignmentVerticalValues.Center);
 
-                    currentRow += 2; // Add space before items
+                    currentRow += 1; // Add space before items
 
                     //  Items Table Header - Starting at Column B
-                    ws.Cell(currentRow, 2).Value = "No";
-                    ws.Cell(currentRow, 3).Value = "Brg Code";
-                    ws.Cell(currentRow, 4).Value = "Brg Name";
-                    ws.Cell(currentRow, 5).Value = "Category - Supplier";
-                    ws.Cell(currentRow, 6).Value = "Qty Besar";
-                    ws.Cell(currentRow, 7).Value = "Qty Kecil";
+                    ws.Cell(currentRow, 1).Value = "No";
+                    ws.Cell(currentRow, 2).Value = "Brg Code";
+                    ws.Cell(currentRow, 3).Value = "Brg Name";
+                    ws.Cell(currentRow, 4).Value = "Category - Supplier";
+                    ws.Cell(currentRow, 5).Value = "Qty Besar";
+                    ws.Cell(currentRow, 6).Value = "Qty Kecil";
 
                     //  Style table header
-                    ws.Range(currentRow, 2, currentRow, 7).Style
-                        .Font.SetBold(true)
-                        .Fill.SetBackgroundColor(XLColor.LightGray)
+                    ws.Range(currentRow, 1, currentRow, 6).Style
                         .Border.SetOutsideBorder(XLBorderStyleValues.Medium)
                         .Border.SetInsideBorder(XLBorderStyleValues.Hair)
-                        .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+                        .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center)
+                        .Alignment.SetVertical(XLAlignmentVerticalValues.Center); // Center vertically for headers
 
                     int itemRow = currentRow + 1;
                     int itemNo = 1;
@@ -321,20 +319,29 @@ namespace BtrGudang.Winform.Forms
                     //  Items Data - Starting at Column B
                     foreach (var brg in faktur.ListBrg)
                     {
-                        ws.Cell(itemRow, 2).Value = itemNo++;
-                        ws.Cell(itemRow, 3).Value = brg.BrgCode;
-                        ws.Cell(itemRow, 4).Value = brg.BrgName;
-                        ws.Cell(itemRow, 5).Value = brg.KategoriSupplier;
-                        ws.Cell(itemRow, 6).Value = brg.QtyBesar;
-                        ws.Cell(itemRow, 7).Value = brg.QtyKecil;
+                        ws.Cell(itemRow, 1).Value = itemNo++;
+                        ws.Cell(itemRow, 2).Value = brg.BrgCode;
+                        ws.Cell(itemRow, 3).Value = brg.BrgName;
+                        ws.Cell(itemRow, 4).Value = brg.KategoriSupplier;
+                        ws.Cell(itemRow, 5).Value = brg.QtyBesar;
+                        ws.Cell(itemRow, 6).Value = brg.QtyKecil;
 
                         //  Apply borders to item row
-                        ws.Range(itemRow, 2, itemRow, 7).Style
+                        ws.Range(itemRow, 1, itemRow, 6).Style
                             .Border.SetOutsideBorder(XLBorderStyleValues.Thin)
-                            .Border.SetInsideBorder(XLBorderStyleValues.Hair);
+                            .Border.SetInsideBorder(XLBorderStyleValues.Dashed);
 
                         //  Center align the number column
-                        ws.Cell(itemRow, 2).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+                        ws.Cell(itemRow, 1).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+
+                        // Set text wrapping and vertical alignment for Brg Name column
+                        ws.Cell(itemRow, 3).Style
+                            .Alignment.SetWrapText(true)
+                            .Alignment.SetVertical(XLAlignmentVerticalValues.Top);
+
+                        // Set text wrapping and vertical alignment for Category - Supplier column
+                        ws.Cell(itemRow, 4).Style.Alignment.SetWrapText(true)
+                            .Alignment.SetVertical(XLAlignmentVerticalValues.Top);
 
                         itemRow++;
                     }
@@ -342,41 +349,31 @@ namespace BtrGudang.Winform.Forms
                     //  Add summary row for this faktur
                     if (faktur.ListBrg.Any())
                     {
-                        ws.Cell(itemRow, 5).Value = $"Total Items: {faktur.ListBrg.Count()}";
-                        ws.Range(itemRow, 5, itemRow, 7).Merge().Style
+                        ws.Cell(itemRow, 4).Value = $"Grand Total : {faktur.GrandTotal:N0}";
+                        ws.Range(itemRow, 4, itemRow, 6).Merge().Style
                             .Font.SetBold(true)
-                            .Fill.SetBackgroundColor(XLColor.LightYellow)
-                            .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Right);
+                            //.Fill.SetBackgroundColor(XLColor.LightYellow)
+                            .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Right)
+                            .Border.SetOutsideBorder(XLBorderStyleValues.Thin);
                         itemRow++;
+                    }
+
+                    // Auto-fit rows for the items section to accommodate wrapped text
+                    for (int row = currentRow + 1; row < itemRow; row++)
+                    {
+                        ws.Row(row).AdjustToContents(); // Adjust height to content
                     }
 
                     currentRow = itemRow + 2; // Add 2 empty rows between fakturs
                 }
 
-                //  Adjust column widths
-                ws.Column(1).Width = 20;  // Header labels
-                ws.Column(2).Width = 5;   // No (starting at B)
-                ws.Column(3).Width = 15;  // Brg Code
-                ws.Column(4).Width = 30;  // Brg Name
-                ws.Column(5).Width = 35;  // Category - Supplier
-                ws.Column(6).Width = 15;  // Qty Besar
-                ws.Column(7).Width = 15;  // Qty Kecil
-                ws.Column(8).Width = 2;   // Spacing
 
                 //  Apply font to all cells
-                ws.RangeUsed().Style.Font.SetFontName("Lucida Console").Font.SetFontSize(9);
-
-                //  Add generation info at the bottom
-                int lastRow = ws.LastRowUsed().RowNumber();
-                ws.Cell(lastRow + 2, 1).Value = $"Report generated: {DateTime.Now:dd-MM-yyyy HH:mm:ss}";
-                ws.Range(lastRow + 2, 1, lastRow + 2, 7).Merge().Style
-                    .Font.SetItalic(true)
-                    .Font.SetFontColor(XLColor.Gray);
+                //ws.RangeUsed().Style.Font.SetFontName("Lucida Console").Font.SetFontSize(9);
 
                 //  Save and open
                 wb.SaveAs(filePath);
             }
-
             System.Diagnostics.Process.Start(filePath);
         }        
         #endregion
@@ -470,7 +467,9 @@ namespace BtrGudang.Winform.Forms
                     (!string.IsNullOrEmpty(x.CustomerName) && x.CustomerName.IndexOf(filterText, StringComparison.OrdinalIgnoreCase) >= 0) ||
                     (!string.IsNullOrEmpty(x.CustomerCode) && x.CustomerCode.IndexOf(filterText, StringComparison.OrdinalIgnoreCase) >= 0) ||
                     (!string.IsNullOrEmpty(x.FakturCode) && x.FakturCode.IndexOf(filterText, StringComparison.OrdinalIgnoreCase) >= 0) ||
-                    (!string.IsNullOrEmpty(x.Alamat) && x.Alamat.IndexOf(filterText, StringComparison.OrdinalIgnoreCase) >= 0)
+                    (!string.IsNullOrEmpty(x.Alamat) && x.Alamat.IndexOf(filterText, StringComparison.OrdinalIgnoreCase) >= 0) ||
+                    (!string.IsNullOrEmpty(x.Driver) && x.Alamat.IndexOf(filterText, StringComparison.OrdinalIgnoreCase) >= 0)
+
                 ).ToList();
 
                 _allFakturBindingSource.DataSource = new BindingList<PK1AllFakturView>(filtered);
@@ -489,12 +488,14 @@ namespace BtrGudang.Winform.Forms
         }
 
         public PK1AllFakturView(string packingOrderId,
-            string fakturCode, DateTime fakturDate, string adminName,
+            string fakturCode, DateTime fakturDate, string adminName, decimal grandTotal, string driver,
             string customerCode, string customerName, string alamat, Uri mapLocation)
         {
             PackingOrderId = packingOrderId;
             FakturCode = fakturCode;
             FakturDate = fakturDate;
+            GrandTotal = grandTotal;
+            Driver = driver;
             AdminName = adminName;
             CustomerCode = customerCode;
             CustomerName = customerName;
@@ -506,6 +507,8 @@ namespace BtrGudang.Winform.Forms
         public string PackingOrderId { get; private set; }
         public string FakturCode { get; private set; }
         public DateTime FakturDate { get; private set; }
+        public decimal GrandTotal { get; private set;  }
+        public string Driver { get; private set; }
         public string AdminName { get; private set; }
         public string CustomerCode { get; private set; }
         public string CustomerName { get; private set; }
@@ -568,8 +571,8 @@ namespace BtrGudang.Winform.Forms
             }
 
             var result = new PK1AllFakturView(view.PackingOrderId, view.Faktur.FakturCode,
-                    view.Faktur.FakturDate, view.Faktur.AdminName, view.Customer.CustomerCode,
-                    view.Customer.CustomerName, view.Customer.Alamat, mapLocation);
+                    view.Faktur.FakturDate, view.Faktur.AdminName, view.Faktur.GrandTotal, 
+                    view.Driver.DriverName, view.Customer.CustomerCode, view.Customer.CustomerName, view.Customer.Alamat, mapLocation);
             return result;
         }
     }
@@ -665,6 +668,8 @@ namespace BtrGudang.Winform.Forms
         public string CustomerName { get; set; }
         public string Alamat { get; set; }
         public string Location { get; set; }
+        public string Driver { get; set; }
+        public decimal GrandTotal { get; set; }
         public IEnumerable<PrintPackingOrderPerFakturBrgView> ListBrg { get; set; }
 
         public static IEnumerable<PrintPackingOrderPerFakturView> CreateFrom(IEnumerable<PackingOrderModel> packingOrders)
@@ -684,6 +689,8 @@ namespace BtrGudang.Winform.Forms
                     CustomerName = po.Customer?.CustomerName ?? "-",
                     Alamat = po.Customer?.Alamat ?? "-",
                     Location = GenerateMapLocation(po.Location, culture),
+                    Driver = po.Driver.DriverName,
+                    GrandTotal = po.Faktur.GrandTotal,
                     ListBrg = po.ListItem?
                         .Where(item => item?.Brg != null)
                         .Select(item => new PrintPackingOrderPerFakturBrgView

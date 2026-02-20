@@ -77,6 +77,7 @@ namespace BtrGudang.Winform.Forms
             
             col["FakturDate"].Width = 100;
             col["FakturDate"].DefaultCellStyle.Format = "dd-MM-yyyy";
+            col["Driver"].Width = 100;
             col["CustomerCode"].Width = 80;
             col["CustomerName"].Width = 225;
             col["Alamat"].Width = 180;
@@ -149,7 +150,8 @@ namespace BtrGudang.Winform.Forms
                     (!string.IsNullOrEmpty(x.CustomerName) && x.CustomerName.IndexOf(filterText, StringComparison.OrdinalIgnoreCase) >= 0) ||
                     (!string.IsNullOrEmpty(x.CustomerCode) && x.CustomerCode.IndexOf(filterText, StringComparison.OrdinalIgnoreCase) >= 0) ||
                     (!string.IsNullOrEmpty(x.FakturCode) && x.FakturCode.IndexOf(filterText, StringComparison.OrdinalIgnoreCase) >= 0) ||
-                    (!string.IsNullOrEmpty(x.Alamat) && x.Alamat.IndexOf(filterText, StringComparison.OrdinalIgnoreCase) >= 0)
+                    (!string.IsNullOrEmpty(x.Alamat) && x.Alamat.IndexOf(filterText, StringComparison.OrdinalIgnoreCase) >= 0) ||
+                    (!string.IsNullOrEmpty(x.DriverName) && x.DriverName.IndexOf(filterText, StringComparison.OrdinalIgnoreCase) >= 0)
                 ).ToList();
 
                 _bindingSource.DataSource = new BindingList<PackingOrderView>(filtered);
@@ -202,17 +204,17 @@ namespace BtrGudang.Winform.Forms
                     .InsertTable(listToExcel, false);
                 var ws = wb.Worksheets.First();
                 //  set border and font
-                ws.Range(ws.Cell($"A{1}"), ws.Cell($"H{listToExcel.Count + 1}")).Style
+                ws.Range(ws.Cell($"A{1}"), ws.Cell($"I{listToExcel.Count + 1}")).Style
                     .Border.SetOutsideBorder(XLBorderStyleValues.Medium)
                     .Border.SetInsideBorder(XLBorderStyleValues.Hair);
-                ws.Range(ws.Cell($"A{1}"), ws.Cell($"H{listToExcel.Count + 1}")).Style
+                ws.Range(ws.Cell($"A{1}"), ws.Cell($"I{listToExcel.Count + 1}")).Style
                     .Font.SetFontName("Lucida Console")
                     .Font.SetFontSize(9);
 
                 //  set format number for columnto N0
-                ws.Range(ws.Cell($"D{2}"), ws.Cell($"H{listToExcel.Count + 1}"))
+                ws.Range(ws.Cell($"D{2}"), ws.Cell($"I{listToExcel.Count + 1}"))
                     .Style.NumberFormat.Format = "dd-MM-yyyy";
-                ws.Range(ws.Cell($"H{2}"), ws.Cell($"H{listToExcel.Count + 1}"))
+                ws.Range(ws.Cell($"H{2}"), ws.Cell($"I{listToExcel.Count + 1}"))
                     .Style.NumberFormat.Format = "dd-MM-yyyy HH:mm:ss";
 
                 //  add rownumbering

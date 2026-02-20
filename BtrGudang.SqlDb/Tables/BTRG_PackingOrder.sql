@@ -18,9 +18,12 @@
 	FakturDate DATETIME NOT NULL CONSTRAINT DF_BTRG_PackingOrder_FakturDate DEFAULT ('3000-01-01'),
 	AdminName VARCHAR(100) NOT NULL CONSTRAINT DF_BTRG_PackingOrder_AdminName DEFAULT (''),
 
+	GrandTotal DECIMAL(18,2) NOT NULL CONSTRAINT DF_BTRG_PackingOrder_GrandTotal DEFAULT(0),
+	DriverId VARCHAR(5) NOT NULL CONSTRAINT DF_BTRG_PackingOrder_DriverId DEFAULT(''),
+	DriverName VARCHAR(5) NOT NULL CONSTRAINT DF_BTRG_PackingOrder_DriverName DEFAULT(''),
+
 	DownloadTimestamp DATETIME NOT NULL CONSTRAINT DF_BTR_PackingOrder_DownloadTimestamp DEFAULT ('3000-01-01'),
 	OfficeCode VARCHAR(3) NOT NULL CONSTRAINT DF_BTR_PackingOrder_OfficeCode DEFAULT(''),
-
 	PrintLogId VARCHAR(26) NOT NULL CONSTRAINT DF_BTR_PackingOrder_PrintLogId DEFAULT(''),
 
 	CONSTRAINT PK_BTRG_PackingOrder PRIMARY KEY CLUSTERED (PackingOrderId)
