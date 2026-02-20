@@ -33,6 +33,8 @@
             this.ListFakturButton = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.AllFakturPage = new System.Windows.Forms.TabPage();
+            this.PrintPerSupplierButton = new System.Windows.Forms.Button();
+            this.PrintPerFakturButton = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.AllFakturGrid = new System.Windows.Forms.DataGridView();
             this.FilterTextBox = new System.Windows.Forms.TextBox();
@@ -40,8 +42,7 @@
             this.PerSupplierFlowPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.PerSupplierGrid = new System.Windows.Forms.DataGridView();
             this.PerFakturPage = new System.Windows.Forms.TabPage();
-            this.PrintPerFakturButton = new System.Windows.Forms.Button();
-            this.PrintPerSupplierButton = new System.Windows.Forms.Button();
+            this.PisahHalamanCheckBox = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.AllFakturPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.AllFakturGrid)).BeginInit();
@@ -97,6 +98,7 @@
             // 
             // AllFakturPage
             // 
+            this.AllFakturPage.Controls.Add(this.PisahHalamanCheckBox);
             this.AllFakturPage.Controls.Add(this.PrintPerSupplierButton);
             this.AllFakturPage.Controls.Add(this.PrintPerFakturButton);
             this.AllFakturPage.Controls.Add(this.button2);
@@ -108,6 +110,32 @@
             this.AllFakturPage.Size = new System.Drawing.Size(768, 368);
             this.AllFakturPage.TabIndex = 0;
             this.AllFakturPage.Text = "All Faktur";
+            // 
+            // PrintPerSupplierButton
+            // 
+            this.PrintPerSupplierButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.PrintPerSupplierButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(125)))), ((int)(((byte)(50)))));
+            this.PrintPerSupplierButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.PrintPerSupplierButton.ForeColor = System.Drawing.Color.WhiteSmoke;
+            this.PrintPerSupplierButton.Location = new System.Drawing.Point(533, 343);
+            this.PrintPerSupplierButton.Name = "PrintPerSupplierButton";
+            this.PrintPerSupplierButton.Size = new System.Drawing.Size(113, 23);
+            this.PrintPerSupplierButton.TabIndex = 6;
+            this.PrintPerSupplierButton.Text = "Print Per-Supplier";
+            this.PrintPerSupplierButton.UseVisualStyleBackColor = false;
+            // 
+            // PrintPerFakturButton
+            // 
+            this.PrintPerFakturButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.PrintPerFakturButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(125)))), ((int)(((byte)(50)))));
+            this.PrintPerFakturButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.PrintPerFakturButton.ForeColor = System.Drawing.Color.WhiteSmoke;
+            this.PrintPerFakturButton.Location = new System.Drawing.Point(652, 343);
+            this.PrintPerFakturButton.Name = "PrintPerFakturButton";
+            this.PrintPerFakturButton.Size = new System.Drawing.Size(113, 23);
+            this.PrintPerFakturButton.TabIndex = 5;
+            this.PrintPerFakturButton.Text = "Print Per-Faktur";
+            this.PrintPerFakturButton.UseVisualStyleBackColor = false;
             // 
             // button2
             // 
@@ -181,31 +209,16 @@
             this.PerFakturPage.Text = "Per Faktur";
             this.PerFakturPage.UseVisualStyleBackColor = true;
             // 
-            // PrintPerFakturButton
+            // PisahHalamanCheckBox
             // 
-            this.PrintPerFakturButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.PrintPerFakturButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(125)))), ((int)(((byte)(50)))));
-            this.PrintPerFakturButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.PrintPerFakturButton.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.PrintPerFakturButton.Location = new System.Drawing.Point(652, 343);
-            this.PrintPerFakturButton.Name = "PrintPerFakturButton";
-            this.PrintPerFakturButton.Size = new System.Drawing.Size(113, 23);
-            this.PrintPerFakturButton.TabIndex = 5;
-            this.PrintPerFakturButton.Text = "Print Per-Faktur";
-            this.PrintPerFakturButton.UseVisualStyleBackColor = false;
-            // 
-            // PrintPerSupplierButton
-            // 
-            this.PrintPerSupplierButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.PrintPerSupplierButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(125)))), ((int)(((byte)(50)))));
-            this.PrintPerSupplierButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.PrintPerSupplierButton.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.PrintPerSupplierButton.Location = new System.Drawing.Point(533, 343);
-            this.PrintPerSupplierButton.Name = "PrintPerSupplierButton";
-            this.PrintPerSupplierButton.Size = new System.Drawing.Size(113, 23);
-            this.PrintPerSupplierButton.TabIndex = 6;
-            this.PrintPerSupplierButton.Text = "Print Per-Supplier";
-            this.PrintPerSupplierButton.UseVisualStyleBackColor = false;
+            this.PisahHalamanCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.PisahHalamanCheckBox.AutoSize = true;
+            this.PisahHalamanCheckBox.Location = new System.Drawing.Point(426, 347);
+            this.PisahHalamanCheckBox.Name = "PisahHalamanCheckBox";
+            this.PisahHalamanCheckBox.Size = new System.Drawing.Size(101, 17);
+            this.PisahHalamanCheckBox.TabIndex = 7;
+            this.PisahHalamanCheckBox.Text = "Pisah Halaman";
+            this.PisahHalamanCheckBox.UseVisualStyleBackColor = true;
             // 
             // PK1PrintPackingOrderForm
             // 
@@ -246,5 +259,6 @@
         private System.Windows.Forms.DataGridView PerSupplierGrid;
         private System.Windows.Forms.Button PrintPerFakturButton;
         private System.Windows.Forms.Button PrintPerSupplierButton;
+        private System.Windows.Forms.CheckBox PisahHalamanCheckBox;
     }
 }

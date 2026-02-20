@@ -206,9 +206,9 @@ namespace BtrGudang.Winform.Forms
             var listPerFaktur = PrintPackingOrderPerFakturView
                 .CreateFrom(listModel)?.ToList()
                 ?? new List<PrintPackingOrderPerFakturView>();
-            ExportPerFakturToExcel(listPerFaktur);
+            ExportPerFakturToExcel(listPerFaktur, PisahHalamanCheckBox.Checked);
         }
-        private void ExportPerFakturToExcel(IEnumerable<PrintPackingOrderPerFakturView> data)
+        private void ExportPerFakturToExcel(IEnumerable<PrintPackingOrderPerFakturView> data, bool pisahHalaman)
         {
             if (data == null || !data.Any())
             {
@@ -236,26 +236,25 @@ namespace BtrGudang.Winform.Forms
                 var ws = wb.AddWorksheet("Packing Order Per Faktur");
 
                 int currentRow = 1;
+                int startRow = 1; // Track start of current faktur for print area
 
-                //  Title
+                //  Title (will be on first page only)
                 ws.Cell(currentRow, 1).Value = "PACKING ORDER PER FAKTUR REPORT";
                 ws.Range(currentRow, 1, currentRow, 6).Merge().Style
                     .Font.SetBold(true)
                     .Font.SetFontSize(14)
                     .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
                 currentRow += 2;
+                startRow = currentRow; // Title is separate, start faktur content here
 
-                //  Adjust column widths
-                ws.Column(1).Width = 4;   // No 
-                ws.Column(2).Width = 10;  // Brg Code
-                ws.Column(3).Width = 35;  // Brg Name - width increased slightly for better wrapping
-                ws.Column(4).Width = 27;  // Category - Supplier - width increased slightly for better wrapping
-                ws.Column(5).Width = 10;  // Qty Besar
-                ws.Column(6).Width = 10;  // Qty Kecil
-                ws.Column(7).Width = 2;   // Spacing
-
+                int fakturCount = 0;
                 foreach (var faktur in data)
                 {
+                    fakturCount++;
+
+                    // Store the starting row of this faktur
+                    int fakturStartRow = currentRow;
+
                     //  Row 1: Customer Code and Name
                     ws.Cell(currentRow, 1).Value = $"{faktur.CustomerName} ({faktur.CustomerCode} )";
                     ws.Range(currentRow, 1, currentRow, 6).Merge()
@@ -335,8 +334,7 @@ namespace BtrGudang.Winform.Forms
                         ws.Cell(itemRow, 1).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
 
                         // Set text wrapping and vertical alignment for Brg Name column
-                        ws.Cell(itemRow, 3).Style
-                            .Alignment.SetWrapText(true)
+                        ws.Cell(itemRow, 3).Style.Alignment.SetWrapText(true)
                             .Alignment.SetVertical(XLAlignmentVerticalValues.Top);
 
                         // Set text wrapping and vertical alignment for Category - Supplier column
@@ -359,23 +357,77 @@ namespace BtrGudang.Winform.Forms
                     }
 
                     // Auto-fit rows for the items section to accommodate wrapped text
-                    for (int row = currentRow + 1; row < itemRow; row++)
+                    for (int row = fakturStartRow + 5; row < itemRow; row++) // +5 to skip header rows
                     {
                         ws.Row(row).AdjustToContents(); // Adjust height to content
+                    }
+
+                    if (pisahHalaman)
+                    {
+                        // Set print area for this faktur
+                        int fakturEndRow = itemRow - 1; // Last row of this faktur
+
+                        // Define the print area range (columns 1-6, rows from fakturStartRow to fakturEndRow)
+                        string printArea = $"$A${fakturStartRow}:$F${fakturEndRow}";
+
+                        // Add this print area to the worksheet
+                        if (fakturCount == 1)
+                        {
+                            // First faktur - set as main print area
+                            ws.PageSetup.PrintAreas.Add(printArea);
+                        }
+                        else
+                        {
+                            // Subsequent fakturs - add as additional print areas
+                            // Each print area will be on its own page
+                            ws.PageSetup.PrintAreas.Add(printArea);
+                        }
+
+                        // Add a page break after each faktur (except the last one)
+                        if (faktur != data.Last())
+                        {
+                            ws.PageSetup.AddHorizontalPageBreak(fakturEndRow + 1);
+                            ws.Cell(fakturEndRow + 1, 1).Value = "--- Page Break ---";
+                            ws.Range(fakturEndRow + 1, 1, fakturEndRow + 1, 6).Merge().Style
+                                .Font.SetFontColor(XLColor.Gray)
+                                .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+                        }
                     }
 
                     currentRow = itemRow + 2; // Add 2 empty rows between fakturs
                 }
 
+                //  Adjust column widths
+                ws.Column(1).Width = 4;   // No 
+                ws.Column(2).Width = 10;  // Brg Code
+                ws.Column(3).Width = 35;  // Brg Name - width increased slightly for better wrapping
+                ws.Column(4).Width = 30;  // Category - Supplier - width increased slightly for better wrapping
+                ws.Column(5).Width = 10;  // Qty Besar
+                ws.Column(6).Width = 10;  // Qty Kecil
+                ws.Column(7).Width = 2;   // Spacing
 
-                //  Apply font to all cells
-                //ws.RangeUsed().Style.Font.SetFontName("Lucida Console").Font.SetFontSize(9);
+                // Optional: Additional print settings for better formatting
+                // Set page orientation to portrait (or landscape if you prefer)
+                ws.PageSetup.PageOrientation = XLPageOrientation.Portrait;
+
+                // Fit all columns on one page width
+                ws.PageSetup.PagesWide = 1;
+                double marginInInches = 0.64 / 2.54; // Convert cm to inches
+                ws.PageSetup.Margins.SetLeft(marginInInches);
+                ws.PageSetup.Margins.SetRight(marginInInches);
+
+                // Optionally set header/footer
+                ws.PageSetup.Header.Center.AddText("Packing Order Per Faktur Report", XLHFOccurrence.AllPages);
+                ws.PageSetup.Footer.Center.AddText($"Page &P of &N", XLHFOccurrence.AllPages);
+
+                // Scale to fit if needed
+                ws.PageSetup.Scale = 90; // Scale to 90% to ensure everything fits
 
                 //  Save and open
                 wb.SaveAs(filePath);
             }
             System.Diagnostics.Process.Start(filePath);
-        }        
+        }
         #endregion
 
         private void InitGrid()
